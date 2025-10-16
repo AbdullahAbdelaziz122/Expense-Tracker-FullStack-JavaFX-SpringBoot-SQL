@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import org.example.Controllers.SignUpController;
 import org.example.utils.Utility;
 import org.example.utils.ViewNavigator;
 
@@ -23,6 +24,7 @@ public class SignUpView {
         Scene scene = createScene();
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 
+        new SignUpController(this);
         ViewNavigator.switchScene(scene);
     }
 
