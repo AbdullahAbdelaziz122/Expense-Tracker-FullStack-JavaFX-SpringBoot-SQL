@@ -1,16 +1,16 @@
 package com.example.expense_tracker.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.Valid;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Entity
 @Table(name = "user")
 public class User {
@@ -19,12 +19,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column(nullable = false)
     private String name;
 
-    @Column(name="password")
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
     private String password;
 
-    @Column(name="created_at")
-    private LocalDate created_at;
+    @CreationTimestamp
+    @Column(name="created_at", updatable = false)
+    private LocalDate createdAt;
 }
