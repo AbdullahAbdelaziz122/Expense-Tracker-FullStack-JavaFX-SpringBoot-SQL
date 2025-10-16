@@ -208,3 +208,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+## Docker ##
+dockerMySQLDatabase.txt
