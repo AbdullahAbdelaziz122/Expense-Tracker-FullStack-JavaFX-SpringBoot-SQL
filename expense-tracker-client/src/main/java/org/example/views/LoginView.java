@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import org.example.Controllers.LoginController;
 import org.example.utils.Utility;
 import org.example.utils.ViewNavigator;
 
@@ -20,8 +21,9 @@ public class LoginView {
     public void show(){
         Scene scene = createScene();
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
-        ViewNavigator.switchScene(scene);
 
+        new LoginController(this);
+        ViewNavigator.switchScene(scene);
     }
 
     private Scene createScene(){
@@ -59,5 +61,46 @@ public class LoginView {
         loginFormBox.getChildren().addAll(usernameFiled, passwordFiled, loginButton, signupLabel);
         loginFormBox.setAlignment(Pos.CENTER);
         return loginFormBox;
+    }
+
+
+    public TextField getUsernameFiled() {
+        return usernameFiled;
+    }
+
+    public void setUsernameFiled(TextField usernameFiled) {
+        this.usernameFiled = usernameFiled;
+    }
+
+    public Label getExpenseTrackerLabel() {
+        return expenseTrackerLabel;
+    }
+
+    public void setExpenseTrackerLabel(Label expenseTrackerLabel) {
+        this.expenseTrackerLabel = expenseTrackerLabel;
+    }
+
+    public TextField getPasswordFiled() {
+        return passwordFiled;
+    }
+
+    public void setPasswordFiled(TextField passwordFiled) {
+        this.passwordFiled = passwordFiled;
+    }
+
+    public Button getLoginButton() {
+        return loginButton;
+    }
+
+    public void setLoginButton(Button loginButton) {
+        this.loginButton = loginButton;
+    }
+
+    public Label getSignupLabel() {
+        return signupLabel;
+    }
+
+    public void setSignupLabel(Label signupLabel) {
+        this.signupLabel = signupLabel;
     }
 }
