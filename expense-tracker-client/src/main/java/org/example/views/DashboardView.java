@@ -11,19 +11,20 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import org.example.Controllers.DashboardController;
+import org.example.User;
 import org.example.utils.Utility;
 import org.example.utils.ViewNavigator;
 
 public class DashboardView {
-    private String email;
+    private User user;
 
     private Label currentBalanceLabel, currentBalance;
     private Label totalIncomeLabel, totalIncome;
     private Label totalExpenseLabel, totalExpense;
     private MenuItem createNewCategoryMenuItem;
 
-    public DashboardView(String email){
-        this.email = email;
+    public DashboardView(User user){
+        this.user = user;
 
         currentBalanceLabel = new Label("Current Balance:");
         totalIncomeLabel = new Label("Total Income:");
@@ -39,7 +40,7 @@ public class DashboardView {
 
         Scene scene = createScene();
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
-        new DashboardController(this);
+        new DashboardController(this, user);
         ViewNavigator.switchScene(scene);
     }
 

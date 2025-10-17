@@ -3,6 +3,7 @@ package org.example.utils;
 import com.google.gson.JsonObject;
 import javafx.scene.control.Alert;
 import org.apache.commons.validator.routines.EmailValidator;
+import org.example.User;
 
 public class Utility {
     public static final int APP_WIDTH = 1614;
@@ -21,5 +22,15 @@ public class Utility {
         EmailValidator emailValidator = EmailValidator.getInstance();
 
         return emailValidator.isValid(email);
+    }
+
+    public static User responseToUserMapper(JsonObject userResponse){
+        User user = new User();
+        user.setId(userResponse.get("id").getAsLong());
+        user.setName(userResponse.get("name").getAsString());
+        user.setEmail(userResponse.get("email").getAsString());
+        user.setPassword(userResponse.get("password").getAsString());
+        user.setCreatedAt(null);
+        return user;
     }
 }

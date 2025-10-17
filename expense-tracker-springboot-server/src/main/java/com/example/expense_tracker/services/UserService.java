@@ -30,22 +30,27 @@ public class UserService {
     public User getUserByEmail(String email){
         logger.info("Getting User by email: " + email);
         return userRepository.findByEmail(email)
-                .orElseThrow(UserNotAuthorizedException::new);
+                .orElseThrow(() -> new UserNotFoundException(email));
     }
 
 
     public User login(String email, String password) {
         logger.info("Attempting login for: " + email);
+        try {
 
-        User user = getUserByEmail(email);
 
-        if (!password.equals(user.getPassword())) {
-            logger.warning("Invalid login attempt for email: " + email);
+            User user = getUserByEmail(email);
+
+            if (!password.equals(user.getPassword())) {
+                logger.warning("Invalid login attempt for email: " + email);
+                throw new UserNotAuthorizedException();
+            }
+
+            logger.info("User logged in successfully: " + email);
+            return user;
+        }catch (UserNotFoundException exception){
             throw new UserNotAuthorizedException();
         }
-
-        logger.info("User logged in successfully: " + email);
-        return user;
     }
 
 

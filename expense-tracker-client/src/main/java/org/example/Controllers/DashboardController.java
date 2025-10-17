@@ -2,14 +2,18 @@ package org.example.Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import org.example.User;
 import org.example.dialogs.CreateNewCategoryDialog;
+import org.example.utils.SqlUtil;
 import org.example.views.DashboardView;
 
 public class DashboardController {
     private DashboardView dashboardView;
+    private User user;
 
-    public DashboardController(DashboardView dashboardView){
+    public DashboardController(DashboardView dashboardView, User user){
         this.dashboardView = dashboardView;
+        this.user = user;
 
         initialize();
     }
@@ -24,7 +28,8 @@ public class DashboardController {
         dashboardView.getCreateNewCategoryMenuItem().setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                new CreateNewCategoryDialog().showAndWait();
+
+                new CreateNewCategoryDialog(user).showAndWait();
             }
         });
     }

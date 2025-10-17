@@ -27,7 +27,14 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-
+    @GetMapping()
+    public ResponseEntity<?> getUserByEmail(@RequestParam String email){
+        User user = userService.getUserByEmail(email);
+        return ResponseEntity.ok(Map.of(
+                "message", "user found",
+                "user", user
+        ));
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest request){
