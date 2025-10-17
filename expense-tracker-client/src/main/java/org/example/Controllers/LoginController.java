@@ -54,7 +54,7 @@ public class LoginController {
                 Utility.showAlertDialog(Alert.AlertType.INFORMATION, "Login successful");
             } else {
                 System.out.println("❌ Login failed: " + response);
-                Utility.showAlertDialog(Alert.AlertType.ERROR, "Failed to authenticate");
+                Utility.showAlertDialog(Alert.AlertType.ERROR, "Failed to authenticate Due to:\n " + response.get("error"));
             }
 
         } catch (Exception e) {

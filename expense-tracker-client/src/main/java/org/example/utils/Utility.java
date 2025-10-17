@@ -1,5 +1,6 @@
 package org.example.utils;
 
+import com.google.gson.JsonObject;
 import javafx.scene.control.Alert;
 import org.apache.commons.validator.routines.EmailValidator;
 
