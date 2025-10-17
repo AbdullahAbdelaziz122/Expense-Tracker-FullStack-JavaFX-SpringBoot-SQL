@@ -3,6 +3,9 @@ package org.example.views;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -16,6 +19,7 @@ public class DashboardView {
     private Label currentBalanceLabel, currentBalance;
     private Label totalIncomeLabel, totalIncome;
     private Label totalExpenseLabel, totalExpense;
+    private MenuItem createNewCategoryMenuItem;
 
     public DashboardView(String email){
         this.email = email;
@@ -39,14 +43,26 @@ public class DashboardView {
     }
 
     private Scene createScene(){
+        MenuBar menuBar = createMenuBar();
+
         VBox mainContainer = new VBox();
         mainContainer.getStyleClass().addAll("main-background");
 
         HBox balanceSummaryBox = createBalanceSummaryBox();
 
 
-        mainContainer.getChildren().addAll(balanceSummaryBox);
+        mainContainer.getChildren().addAll(menuBar, balanceSummaryBox);
         return new Scene(mainContainer, Utility.APP_WIDTH, Utility.APP_HEIGHT);
+    }
+
+    private MenuBar createMenuBar(){
+        MenuBar menuBar = new MenuBar();
+        Menu fileMenu = new Menu("File");
+
+        createNewCategoryMenuItem = new MenuItem("Create Category");
+        fileMenu.getItems().addAll(createNewCategoryMenuItem);
+        menuBar.getMenus().addAll(fileMenu);
+        return menuBar;
     }
 
     private HBox createBalanceSummaryBox(){
