@@ -59,4 +59,15 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(EmailAlreadyExist.class)
+    public ResponseEntity<Map<String, Object>> handelEmailAlreadyExist(EmailAlreadyExist ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of(
+                        "error", ex.getMessage(),
+                        "status", HttpStatus.BAD_REQUEST.value(),
+                        "timestamp", LocalDateTime.now()
+                )
+        );
+    }
+
 }
