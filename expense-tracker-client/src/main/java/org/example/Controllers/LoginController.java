@@ -6,6 +6,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import org.example.utils.ApiUtil;
 import org.example.utils.Utility;
+import org.example.views.DashboardView;
 import org.example.views.LoginView;
 import org.example.views.SignUpView;
 
@@ -25,7 +26,10 @@ public class LoginController {
                 String email = loginView.getUsernameField().getText();
                 String password = loginView.getPasswordField().getText();
 
-                login(email, password);
+                if(login(email, password)){
+                    new DashboardView(email).show();
+                }
+
 
             }
         });
@@ -39,7 +43,7 @@ public class LoginController {
     }
 
 
-    public void login(String email, String password) {
+    public boolean login(String email, String password) {
         JsonObject loginRequest = new JsonObject();
         loginRequest.addProperty("email", email);
         loginRequest.addProperty("password", password);
@@ -52,14 +56,17 @@ public class LoginController {
             if (status == 200) {
                 System.out.println("✅ Login successful: " + response);
                 Utility.showAlertDialog(Alert.AlertType.INFORMATION, "Login successful");
+                return true;
             } else {
                 System.out.println("❌ Login failed: " + response);
                 Utility.showAlertDialog(Alert.AlertType.ERROR, "Failed to authenticate Due to:\n " + response.get("error"));
+                return false;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("⚠️ Network or connection error: " + e.getMessage());
+            return false;
         }
     }
 }
