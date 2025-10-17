@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import org.example.Controllers.DashboardController;
 import org.example.utils.Utility;
 import org.example.utils.ViewNavigator;
 
@@ -38,7 +39,7 @@ public class DashboardView {
 
         Scene scene = createScene();
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
-
+        new DashboardController(this);
         ViewNavigator.switchScene(scene);
     }
 
@@ -93,5 +94,13 @@ public class DashboardView {
         balanceSummaryBox.getChildren().addAll(currentBalanceVBox, region1, totalIncomeVBox, region2, totalExpenseVBox);
 
         return balanceSummaryBox;
+    }
+
+    public MenuItem getCreateNewCategoryMenuItem() {
+        return createNewCategoryMenuItem;
+    }
+
+    public void setCreateNewCategoryMenuItem(MenuItem createNewCategoryMenuItem) {
+        this.createNewCategoryMenuItem = createNewCategoryMenuItem;
     }
 }

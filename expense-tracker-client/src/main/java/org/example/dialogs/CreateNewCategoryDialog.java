@@ -22,6 +22,8 @@ public class CreateNewCategoryDialog extends CustomDialog{
         newCategoryTextFiled = new TextField();
         newCategoryTextFiled.setPromptText("Enter Category Name");
         newCategoryTextFiled.getStyleClass().addAll("text-size-md", "field-background", "text-light-gray");
+        
+
         dialogContentBox.getChildren().addAll(newCategoryTextFiled);
         return dialogContentBox;
     }
