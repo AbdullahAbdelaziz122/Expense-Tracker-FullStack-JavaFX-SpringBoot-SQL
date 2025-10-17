@@ -2,6 +2,7 @@ package com.example.expense_tracker.controllers;
 
 
 import com.example.expense_tracker.DTO.LoginRequest;
+import com.example.expense_tracker.DTO.RegisterRequest;
 import com.example.expense_tracker.models.User;
 import com.example.expense_tracker.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +31,19 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest request){
-        User user = userService.login(request.getEmail(), request.getPassword());
+        User user = userService.login(request.email(), request.password());
         return ResponseEntity.ok(Map.of(
                         "message", "login successful",
                         "user", user
+        ));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request){
+        User user = userService.registerUser(request.name(), request.email(), request.password());
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
+                "message", "user created",
+                "user", user
         ));
     }
 }
