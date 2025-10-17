@@ -17,14 +17,21 @@ public class CreateNewCategoryDialog extends CustomDialog{
     }
 
     private VBox createDialogeContentBox(){
-        VBox dialogContentBox = new VBox();
+        VBox dialogContentBox = new VBox(30);
 
         newCategoryTextFiled = new TextField();
         newCategoryTextFiled.setPromptText("Enter Category Name");
         newCategoryTextFiled.getStyleClass().addAll("text-size-md", "field-background", "text-light-gray");
-        
 
-        dialogContentBox.getChildren().addAll(newCategoryTextFiled);
+        colorPicker = new ColorPicker();
+        colorPicker.getStyleClass().add("text-size-md");
+        colorPicker.setMaxWidth(Double.MAX_VALUE);
+
+        createCategoryBtn = new Button("Create");
+        createCategoryBtn.getStyleClass().addAll("bg-light-blue", "text-size-md", "text-white");
+        createCategoryBtn.setMaxWidth(Double.MAX_VALUE);
+
+        dialogContentBox.getChildren().addAll(newCategoryTextFiled, colorPicker, createCategoryBtn);
         return dialogContentBox;
     }
 
