@@ -1,17 +1,15 @@
 package com.example.expense_tracker.controllers;
 
+import com.example.expense_tracker.DTO.ApiResponse;
 import com.example.expense_tracker.DTO.TransactionCategoryRequest;
 import com.example.expense_tracker.models.TransactionCategory;
 import com.example.expense_tracker.services.TransactionCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
 import java.util.logging.Logger;
 
 @RequiredArgsConstructor
@@ -23,20 +21,55 @@ public class TransactionCategoryController {
 
     private final TransactionCategoryService transactionCategoryService;
 
+    //get
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getAllTransactionByUserId(@PathVariable Long userId){
+        try {
+            List<TransactionCategory> transactionCategoryList = transactionCategoryService.getTransactionCategoriesByUserId(userId);
+
+            if(transactionCategoryList.isEmpty()){
+                return ResponseEntity.ok(new ApiResponse<List<TransactionCategory>>(
+                        true,
+                        "No Transaction categories found for this user.",
+                        List.of()));
+
+            }
+
+            return ResponseEntity.ok(new ApiResponse<List<TransactionCategory>>(
+                    true,
+                    "Transaction categories retrieved successfully.",
+                    transactionCategoryList));
+        }catch (Exception ex){
+            return ResponseEntity.ok(new ApiResponse<>(
+                    false,
+                    ex.getMessage(),
+                    null));
+        }
+    }
+
+    // post
 
     @PostMapping
     public ResponseEntity<?> createTransactionCategory(@RequestBody TransactionCategoryRequest transactionCategoryRequest){
-        logger.info("Creating Transaction Category for : "+ transactionCategoryRequest.categoryName());
+        try {
+            logger.info("Creating Transaction Category for : "+ transactionCategoryRequest.categoryName());
 
-        TransactionCategory createdTransactionCategory = transactionCategoryService.createTransactionCategory(
-                transactionCategoryRequest.userId(),
-                transactionCategoryRequest.categoryName(),
-                transactionCategoryRequest.categoryColor());
+            TransactionCategory createdTransactionCategory = transactionCategoryService.createTransactionCategory(
+                    transactionCategoryRequest.userId(),
+                    transactionCategoryRequest.categoryName(),
+                    transactionCategoryRequest.categoryColor());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                "message", "transaction category created",
-                "transaction-category", createdTransactionCategory
-        ));
-
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<TransactionCategory>(
+                    true,
+                    "Transaction Category created Successfully",
+                    createdTransactionCategory
+            ));
+        }catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<TransactionCategory>(
+                    false,
+                    ex.getMessage(),
+                    null
+            ));
+        }
     }
 }

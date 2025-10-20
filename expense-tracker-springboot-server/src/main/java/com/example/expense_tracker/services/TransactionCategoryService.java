@@ -6,6 +6,7 @@ import com.example.expense_tracker.repositories.TransactionCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 @Service
@@ -21,6 +22,12 @@ public class TransactionCategoryService {
         this.userService = userService;
     }
 
+
+    //get
+    public List<TransactionCategory> getTransactionCategoriesByUserId(Long userId){
+        userService.getUserById(userId);
+        return transactionCategoryRepository.getTransactionCategoryByUserId(userId);
+    }
 
     // post
     public TransactionCategory createTransactionCategory(Long userId, String categoryName, String categoryColor){
