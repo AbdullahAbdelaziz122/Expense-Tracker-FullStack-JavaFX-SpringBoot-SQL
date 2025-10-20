@@ -1,9 +1,11 @@
 package com.example.expense_tracker.services;
 
+import com.example.expense_tracker.DTO.TransactionCategoryResponse;
+import com.example.expense_tracker.DTO.UserResponse;
+import com.example.expense_tracker.DTO.UserTransactionResponse;
 import com.example.expense_tracker.models.TransactionCategory;
 import com.example.expense_tracker.models.User;
 import com.example.expense_tracker.repositories.TransactionCategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,9 +26,22 @@ public class TransactionCategoryService {
 
 
     //get
-    public List<TransactionCategory> getTransactionCategoriesByUserId(Long userId){
-        userService.getUserById(userId);
-        return transactionCategoryRepository.getTransactionCategoryByUserId(userId);
+    public UserTransactionResponse getTransactionCategoriesByUserId(Long userId){
+        User user = userService.getUserById(userId);
+        UserResponse userResponse = new UserResponse(user.getId(), user.getName(), user.getEmail());
+
+        List<TransactionCategory> categories =transactionCategoryRepository.getTransactionCategoryByUserId(userId);
+
+        List<TransactionCategoryResponse> categoryResponses = categories.stream().map(
+                cat -> new TransactionCategoryResponse(cat.getId(), cat.getCategoryName(), cat.getCategoryColor())
+        ).toList();
+
+        UserTransactionResponse userTransactionResponse = new UserTransactionResponse(
+                userResponse,
+                categoryResponses
+        );
+
+        return userTransactionResponse;
     }
 
     // post

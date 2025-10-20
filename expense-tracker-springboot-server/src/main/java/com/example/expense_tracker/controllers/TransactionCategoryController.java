@@ -2,6 +2,7 @@ package com.example.expense_tracker.controllers;
 
 import com.example.expense_tracker.DTO.ApiResponse;
 import com.example.expense_tracker.DTO.TransactionCategoryRequest;
+import com.example.expense_tracker.DTO.UserTransactionResponse;
 import com.example.expense_tracker.models.TransactionCategory;
 import com.example.expense_tracker.services.TransactionCategoryService;
 import lombok.RequiredArgsConstructor;
@@ -25,20 +26,19 @@ public class TransactionCategoryController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getAllTransactionByUserId(@PathVariable Long userId){
         try {
-            List<TransactionCategory> transactionCategoryList = transactionCategoryService.getTransactionCategoriesByUserId(userId);
+            UserTransactionResponse userTransactionResponse = transactionCategoryService.getTransactionCategoriesByUserId(userId);
 
-            if(transactionCategoryList.isEmpty()){
-                return ResponseEntity.ok(new ApiResponse<List<TransactionCategory>>(
+            if(userTransactionResponse.getCategories().isEmpty()){
+                return ResponseEntity.ok(new ApiResponse<UserTransactionResponse>(
                         true,
-                        "No Transaction categories found for this user.",
-                        List.of()));
+                        "No Transaction categories found for this user.", userTransactionResponse));
 
             }
 
-            return ResponseEntity.ok(new ApiResponse<List<TransactionCategory>>(
+            return ResponseEntity.ok(new ApiResponse<UserTransactionResponse>(
                     true,
                     "Transaction categories retrieved successfully.",
-                    transactionCategoryList));
+                    userTransactionResponse));
         }catch (Exception ex){
             return ResponseEntity.ok(new ApiResponse<>(
                     false,

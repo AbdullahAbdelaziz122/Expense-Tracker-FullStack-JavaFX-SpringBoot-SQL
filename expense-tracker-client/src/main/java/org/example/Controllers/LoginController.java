@@ -52,16 +52,16 @@ public class LoginController {
         try {
             JsonObject response = ApiUtil.fetchApi("/api/v1/user/login", ApiUtil.RequestMethod.POST, loginRequest);
 
-            int status = response.get("status").getAsInt();
+            boolean status = response.get("success").getAsBoolean();
 
-            if (status == 200) {
+            if (status) {
                 System.out.println("✅ Login successful: " + response);
                 Utility.showAlertDialog(Alert.AlertType.INFORMATION, "Login successful");
 
-                return Utility.responseToUserMapper(response.get("user").getAsJsonObject());
+                return Utility.responseToUserMapper(response.get("data").getAsJsonObject());
             } else {
                 System.out.println("❌ Login failed: " + response);
-                Utility.showAlertDialog(Alert.AlertType.ERROR, "Failed to authenticate Due to:\n " + response.get("error"));
+                Utility.showAlertDialog(Alert.AlertType.ERROR, "Failed to authenticate Due to:\n " + response.get("message"));
                 return null;
             }
 

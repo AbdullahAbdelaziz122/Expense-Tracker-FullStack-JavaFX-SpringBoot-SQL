@@ -4,16 +4,12 @@ package com.example.expense_tracker.controllers;
 import com.example.expense_tracker.DTO.ApiResponse;
 import com.example.expense_tracker.DTO.LoginRequest;
 import com.example.expense_tracker.DTO.RegisterRequest;
-import com.example.expense_tracker.exceptions.UserNotFoundException;
 import com.example.expense_tracker.models.User;
 import com.example.expense_tracker.services.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 
 @RestController

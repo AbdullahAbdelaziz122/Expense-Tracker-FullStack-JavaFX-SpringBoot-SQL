@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.logging.Logger;
 import org.springframework.stereotype.Service;
 
@@ -21,19 +20,23 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+
+    // todo : return user response instead of actual user
     public User getUserById(Long userId) {
         logger.info("Getting User by id: " + userId);
-        return userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
+        return  user;
     }
 
+    // todo : return user response instead of actual user
     public User getUserByEmail(String email){
         logger.info("Getting User by email: " + email);
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
     }
 
-
+    // todo : return user response instead of actual user
     public User login(String email, String password) {
         logger.info("Attempting login for: " + email);
         try {
@@ -53,7 +56,7 @@ public class UserService {
         }
     }
 
-
+    // todo : return user response instead of actual user
     public User registerUser(String name, String email, String password) {
         if (checkEmailAlreadyExist(email)) {
             logger.warning("Attempt to register user with existing email: "+ email);

@@ -74,16 +74,16 @@ public class SignUpController {
         try {
             JsonObject response = ApiUtil.fetchApi("/api/v1/user/register", ApiUtil.RequestMethod.POST, registerRequest);
 
-            int status = response.get("status").getAsInt();
+            boolean status = response.get("success").getAsBoolean();
 
-            if (status == 201) {
+            if (status) {
                 System.out.println("✅ Register user is Successful: " + response);
                 Utility.showAlertDialog(Alert.AlertType.INFORMATION, "Registration successful");
                 return true;
 
             } else {
                 System.out.println("❌ Register user failed: " + response);
-                Utility.showAlertDialog(Alert.AlertType.ERROR, "Registration Failed Due to:\n" + response.get("error"));
+                Utility.showAlertDialog(Alert.AlertType.ERROR, "Registration Failed Due to:\n" + response.get("message"));
                 return false;
             }
 
