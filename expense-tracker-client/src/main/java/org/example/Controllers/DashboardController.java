@@ -3,8 +3,8 @@ package org.example.Controllers;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import org.example.User;
-import org.example.dialogs.CreateNewCategoryDialog;
-import org.example.utils.SqlUtil;
+import org.example.dialogs.CreateNewTransactionCategoryDialog;
+import org.example.dialogs.ViewOrEditTransactionCategoryDialog;
 import org.example.views.DashboardView;
 
 public class DashboardController {
@@ -29,8 +29,17 @@ public class DashboardController {
             @Override
             public void handle(ActionEvent actionEvent) {
 
-                new CreateNewCategoryDialog(user).showAndWait();
+                new CreateNewTransactionCategoryDialog(user).showAndWait();
+            }
+        });
+
+
+        dashboardView.getViewCategoriesMenuItem().setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                new ViewOrEditTransactionCategoryDialog(user, DashboardController.this).showAndWait();
             }
         });
     }
+
 }

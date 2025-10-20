@@ -12,7 +12,8 @@ public class JavaFXApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         ViewNavigator.setMainStage(stage);
-        new LoginView().show();
-//        new DashboardView("email@email.com").show();
+//        new LoginView().show();
+        User fakeUser= new User();
+        new DashboardView(fakeUser).show();
     }
 }

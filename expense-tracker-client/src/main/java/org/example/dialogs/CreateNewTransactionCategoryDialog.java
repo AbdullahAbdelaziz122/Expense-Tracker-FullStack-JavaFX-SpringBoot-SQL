@@ -12,13 +12,13 @@ import org.example.User;
 import org.example.utils.SqlUtil;
 import org.example.utils.Utility;
 
-public class CreateNewCategoryDialog extends CustomDialog{
+public class CreateNewTransactionCategoryDialog extends CustomDialog{
     private TextField newCategoryTextFiled;
     private ColorPicker colorPicker;
     private Button createCategoryBtn;
     private User user;
 
-    public CreateNewCategoryDialog(User user){
+    public CreateNewTransactionCategoryDialog(User user){
         super(user);
         this.user = user;
         setTitle("Create New Category");
@@ -37,14 +37,14 @@ public class CreateNewCategoryDialog extends CustomDialog{
         colorPicker.setMaxWidth(Double.MAX_VALUE);
 
         createCategoryBtn = new Button("Create");
-        createCategoryBtn.getStyleClass().addAll("bg-light-blue", "text-size-md", "text-white");
+        createCategoryBtn.getStyleClass().addAll("bg-light-blue","text-size-md", "text-white");
         createCategoryBtn.setMaxWidth(Double.MAX_VALUE);
 
         createCategoryBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
 
-                JsonObject response = SqlUtil.createNewCategory(
+                JsonObject response = SqlUtil.postTransactionCategory(
                                 user.getId(),
                                 newCategoryTextFiled.getText(),
                                 Utility.convertHexColor(colorPicker)

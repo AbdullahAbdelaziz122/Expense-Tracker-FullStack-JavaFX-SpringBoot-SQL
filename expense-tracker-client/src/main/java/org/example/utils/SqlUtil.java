@@ -1,11 +1,9 @@
 package org.example.utils;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.example.User;
 
 import java.io.IOException;
-import java.time.LocalDate;
 
 public class SqlUtil {
 
@@ -35,7 +33,7 @@ public class SqlUtil {
     }
 
 
-    public static JsonObject createNewCategory(Long userId, String categoryName, String categoryColor){
+    public static JsonObject postTransactionCategory(Long userId, String categoryName, String categoryColor){
         JsonObject request = new JsonObject();
         request.addProperty("userId", userId);
         request.addProperty("categoryName", categoryName);
