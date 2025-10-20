@@ -3,6 +3,7 @@ package org.example.utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ColorPicker;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.example.User;
 
@@ -37,5 +38,10 @@ public class Utility {
         user.setCreatedAt(createdAt);
 
         return user;
+    }
+
+    public static String convertHexColor(ColorPicker colorPicker){
+        String color = colorPicker.getValue().toString();
+        return color.substring(2, color.length() - 2);
     }
 }

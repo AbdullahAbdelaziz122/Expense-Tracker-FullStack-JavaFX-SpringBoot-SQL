@@ -47,7 +47,7 @@ public class CreateNewCategoryDialog extends CustomDialog{
                 JsonObject response = SqlUtil.createNewCategory(
                                 user.getId(),
                                 newCategoryTextFiled.getText(),
-                                colorPicker.getValue().toString()
+                                Utility.convertHexColor(colorPicker)
                 );
                 handelCreateCategoryResponse(response);
             }
