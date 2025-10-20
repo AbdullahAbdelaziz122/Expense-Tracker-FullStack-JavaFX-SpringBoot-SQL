@@ -1,9 +1,12 @@
 package org.example.utils;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import javafx.scene.control.Alert;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.example.User;
+
+import java.time.LocalDate;
 
 public class Utility {
     public static final int APP_WIDTH = 1614;
@@ -30,7 +33,9 @@ public class Utility {
         user.setName(userResponse.get("name").getAsString());
         user.setEmail(userResponse.get("email").getAsString());
         user.setPassword(userResponse.get("password").getAsString());
-        user.setCreatedAt(null);
+        LocalDate createdAt = new Gson().fromJson(userResponse.get("created_at"), LocalDate.class);
+        user.setCreatedAt(createdAt);
+
         return user;
     }
 }
