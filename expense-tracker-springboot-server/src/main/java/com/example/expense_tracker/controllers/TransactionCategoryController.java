@@ -3,6 +3,7 @@ package com.example.expense_tracker.controllers;
 import com.example.expense_tracker.DTO.ApiResponse;
 import com.example.expense_tracker.DTO.TransactionCategoryRequest;
 import com.example.expense_tracker.DTO.UserTransactionResponse;
+import com.example.expense_tracker.exceptions.TransactionCategoryAlreadyExist;
 import com.example.expense_tracker.models.TransactionCategory;
 import com.example.expense_tracker.services.TransactionCategoryService;
 import lombok.RequiredArgsConstructor;
@@ -54,18 +55,18 @@ public class TransactionCategoryController {
         try {
             logger.info("Creating Transaction Category for : "+ transactionCategoryRequest.categoryName());
 
-            TransactionCategory createdTransactionCategory = transactionCategoryService.createTransactionCategory(
+            UserTransactionResponse createdTransactionCategory = transactionCategoryService.createTransactionCategory(
                     transactionCategoryRequest.userId(),
                     transactionCategoryRequest.categoryName(),
                     transactionCategoryRequest.categoryColor());
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<TransactionCategory>(
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<UserTransactionResponse>(
                     true,
                     "Transaction Category created Successfully",
                     createdTransactionCategory
             ));
         }catch (Exception ex){
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<TransactionCategory>(
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(
                     false,
                     ex.getMessage(),
                     null

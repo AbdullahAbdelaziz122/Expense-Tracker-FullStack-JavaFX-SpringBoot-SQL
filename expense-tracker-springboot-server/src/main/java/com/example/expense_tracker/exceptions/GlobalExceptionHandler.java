@@ -70,4 +70,15 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(TransactionCategoryAlreadyExist.class)
+    public ResponseEntity<Map<String, Object>> handleTransactionCategoryAlreadyExist(TransactionCategoryAlreadyExist ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                Map.of(
+                        "error", ex.getMessage(),
+                        "status", HttpStatus.BAD_REQUEST.value(),
+                        "timestamp", LocalDateTime.now()
+                )
+        );
+    }
+
 }

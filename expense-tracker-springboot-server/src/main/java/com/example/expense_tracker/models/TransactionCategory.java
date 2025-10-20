@@ -8,8 +8,6 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
 @Table(name = "transaction_category")
 @Entity
 public class TransactionCategory {
@@ -22,9 +20,41 @@ public class TransactionCategory {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
-    private String CategoryName;
+    @Column(name = "category_name")
+    private String categoryName;
 
     @Column(nullable = false)
-    private String CategoryColor;
+    private String categoryColor;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getCategoryColor() {
+        return categoryColor;
+    }
+
+    public void setCategoryColor(String categoryColor) {
+        this.categoryColor = categoryColor;
+    }
 }

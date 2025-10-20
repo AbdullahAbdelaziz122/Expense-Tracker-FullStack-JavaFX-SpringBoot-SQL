@@ -3,12 +3,14 @@ package com.example.expense_tracker.services;
 import com.example.expense_tracker.DTO.TransactionCategoryResponse;
 import com.example.expense_tracker.DTO.UserResponse;
 import com.example.expense_tracker.DTO.UserTransactionResponse;
+import com.example.expense_tracker.exceptions.TransactionCategoryAlreadyExist;
 import com.example.expense_tracker.models.TransactionCategory;
 import com.example.expense_tracker.models.User;
 import com.example.expense_tracker.repositories.TransactionCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @Service
@@ -44,10 +46,21 @@ public class TransactionCategoryService {
         return userTransactionResponse;
     }
 
+    public TransactionCategory getTransactionCategoryByCategoryName(String name){
+        return transactionCategoryRepository.getTransactionCategoryByCategoryName(name);
+    }
+
+
     // post
-    public TransactionCategory createTransactionCategory(Long userId, String categoryName, String categoryColor){
+    public UserTransactionResponse createTransactionCategory(Long userId, String categoryName, String categoryColor){
         logger.info("Create TransactionCategory with User: "+ userId);
+
+        // validation
         User user = userService.getUserById(userId);
+        if(transactionCategoryRepository.existsByCategoryName(categoryName)){
+            throw new TransactionCategoryAlreadyExist(categoryName);
+        }
+
 
         TransactionCategory transactionCategory = new TransactionCategory();
         transactionCategory.setUser(user);
@@ -55,7 +68,12 @@ public class TransactionCategoryService {
         transactionCategory.setCategoryColor(categoryColor);
 
         TransactionCategory savedCategory = transactionCategoryRepository.save(transactionCategory);
-        return savedCategory;
+
+        // response
+        UserResponse userResponse = new UserResponse(user.getId(), user.getName(), user.getEmail());
+        TransactionCategoryResponse transactionCategoryResponse = new TransactionCategoryResponse(savedCategory.getId(), savedCategory.getCategoryName(), savedCategory.getCategoryColor());
+        List<TransactionCategoryResponse> categories = List.of(transactionCategoryResponse);
+        return new UserTransactionResponse(userResponse,categories);
     }
 
 
