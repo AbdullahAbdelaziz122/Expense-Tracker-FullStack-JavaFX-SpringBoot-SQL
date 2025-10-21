@@ -4,4 +4,5 @@ module expense.tracker.client {
     requires org.apache.commons.validator;
 
     exports org.example;
+    exports org.example.models;
 }

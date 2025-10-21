@@ -8,7 +8,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import org.example.User;
+import org.example.models.User;
 import org.example.utils.SqlUtil;
 import org.example.utils.Utility;
 

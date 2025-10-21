@@ -2,7 +2,7 @@ package org.example.Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import org.example.User;
+import org.example.models.User;
 import org.example.dialogs.CreateNewTransactionCategoryDialog;
 import org.example.dialogs.ViewOrEditTransactionCategoryDialog;
 import org.example.views.DashboardView;

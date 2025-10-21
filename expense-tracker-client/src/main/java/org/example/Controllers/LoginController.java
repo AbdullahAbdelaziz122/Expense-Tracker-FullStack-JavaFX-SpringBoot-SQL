@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
-import org.example.User;
+import org.example.models.User;
 import org.example.utils.ApiUtil;
 import org.example.utils.Utility;
 import org.example.views.DashboardView;

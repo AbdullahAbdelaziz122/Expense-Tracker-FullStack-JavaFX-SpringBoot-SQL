@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ColorPicker;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.example.User;
+import org.example.models.User;
 
 import java.time.LocalDate;
 

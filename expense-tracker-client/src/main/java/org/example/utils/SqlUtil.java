@@ -1,7 +1,7 @@
 package org.example.utils;
 
 import com.google.gson.JsonObject;
-import org.example.User;
+import org.example.models.User;
 
 import java.io.IOException;
 

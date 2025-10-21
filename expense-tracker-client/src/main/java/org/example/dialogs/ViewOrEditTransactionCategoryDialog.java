@@ -1,7 +1,7 @@
 package org.example.dialogs;
 
 import org.example.Controllers.DashboardController;
-import org.example.User;
+import org.example.models.User;
 
 public class ViewOrEditTransactionCategoryDialog extends CustomDialog{
     private DashboardController dashboardController;
@@ -14,6 +14,8 @@ public class ViewOrEditTransactionCategoryDialog extends CustomDialog{
         setTitle("View Categories");
         setWidth(815);
         setHeight(500);
+
+//        ScrollPane
     }
 
 

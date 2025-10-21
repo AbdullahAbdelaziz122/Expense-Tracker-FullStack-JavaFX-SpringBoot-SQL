@@ -11,7 +11,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import org.example.Controllers.DashboardController;
-import org.example.User;
+import org.example.models.User;
 import org.example.utils.Utility;
 import org.example.utils.ViewNavigator;
 

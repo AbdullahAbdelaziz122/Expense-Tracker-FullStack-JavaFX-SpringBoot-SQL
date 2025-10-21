@@ -3,7 +3,7 @@ package org.example.dialogs;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
-import org.example.User;
+import org.example.models.User;
 
 public class CustomDialog extends Dialog {
     private User user;
