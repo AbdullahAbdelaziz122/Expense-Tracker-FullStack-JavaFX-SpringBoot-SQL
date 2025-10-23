@@ -12,6 +12,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import org.example.controllers.DashboardController;
 import org.example.models.TransactionCategory;
+import org.example.utils.SqlUtil;
+import org.example.utils.Utility;
 
 public class CategoryComponent extends HBox {
 
@@ -72,6 +74,14 @@ public class CategoryComponent extends HBox {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 handleToggle();
+
+                // extract data
+                String newCategoryName = categoryTextfield.getText();
+                String newCategoryColor = Utility.convertHexColor(colorPicker);
+                Long categoryId = transactionCategory.getId();
+                // send update request
+                boolean status = SqlUtil.putTransactionCategory(categoryId, newCategoryName, newCategoryColor);
+
             }
         });
 

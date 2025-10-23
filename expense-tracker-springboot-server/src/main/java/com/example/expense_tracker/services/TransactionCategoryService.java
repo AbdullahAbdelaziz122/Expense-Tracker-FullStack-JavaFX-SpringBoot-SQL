@@ -1,9 +1,8 @@
 package com.example.expense_tracker.services;
 
-import com.example.expense_tracker.DTO.TransactionCategoryResponse;
-import com.example.expense_tracker.DTO.UserResponse;
-import com.example.expense_tracker.DTO.UserTransactionResponse;
+import com.example.expense_tracker.DTO.*;
 import com.example.expense_tracker.exceptions.TransactionCategoryAlreadyExist;
+import com.example.expense_tracker.exceptions.TransactionCategoryNotFound;
 import com.example.expense_tracker.models.TransactionCategory;
 import com.example.expense_tracker.models.User;
 import com.example.expense_tracker.repositories.TransactionCategoryRepository;
@@ -50,6 +49,11 @@ public class TransactionCategoryService {
         return transactionCategoryRepository.getTransactionCategoryByCategoryName(name);
     }
 
+    public TransactionCategory getTransactionCategoryById(Long categoryId){
+        return transactionCategoryRepository.findById(categoryId)
+                .orElseThrow(() -> new TransactionCategoryNotFound(categoryId));
+    }
+
 
     // post
     public UserTransactionResponse createTransactionCategory(Long userId, String categoryName, String categoryColor) {
@@ -88,5 +92,25 @@ public class TransactionCategoryService {
 
         return new UserTransactionResponse(userResponse, List.of(categoryResponse));
     }
-    
+
+    // put
+    public TransactionCategoryResponse updateTransactionCategoryById(UpdateTransactionCategoryRequest newCategory){
+
+        // 1. Validate category existence
+        TransactionCategory oldCategory = getTransactionCategoryById(newCategory.categoryId());
+
+
+        // update
+        oldCategory.setCategoryName(newCategory.categoryName());
+        oldCategory.setCategoryColor(newCategory.categoryColor());
+
+        // save
+        TransactionCategory savedCategory = transactionCategoryRepository.save(oldCategory);
+        logger.info("Successfully updated TransactionCategory ID: { " + savedCategory.getId() + " }");
+        return new TransactionCategoryResponse(
+                savedCategory.getId(),
+                savedCategory.getCategoryName(),
+                savedCategory.getCategoryColor());
+    }
+
 }

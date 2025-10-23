@@ -81,4 +81,14 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(TransactionCategoryNotFound.class)
+    public ResponseEntity<Map<String, Object>> handleTransactionCategoryNotFound(TransactionCategoryNotFound ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                Map.of(
+                        "error", ex.getMessage(),
+                        "status", HttpStatus.NOT_FOUND.value(),
+                        "timestamp", LocalDateTime.now()
+                )
+        );
+    }
 }

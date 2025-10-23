@@ -131,7 +131,7 @@ public class SqlUtil {
             System.out.println("Fetched " + transactionCategories.size() + " categories.");
 
         } catch (IOException e) {
-            System.err.println("⚠Network or I/O error while fetching categories: " + e.getMessage());
+            System.err.println("Network or I/O error while fetching categories: " + e.getMessage());
         } catch (Exception e) {
             System.err.println("Unexpected error: " + e.getMessage());
             e.printStackTrace();
@@ -140,5 +140,41 @@ public class SqlUtil {
         return transactionCategories;
     }
 
+
+    public static boolean putTransactionCategory(Long categoryId, String newCategoryName, String newCategoryColor){
+
+        JsonObject request = new JsonObject();
+        request.addProperty("categoryId", categoryId);
+        request.addProperty("categoryName", newCategoryName);
+        request.addProperty("categoryColor", newCategoryColor);
+
+        try {
+
+            JsonObject response = ApiUtil.fetchApi(
+                    "/api/v1/transaction-category",
+                    ApiUtil.RequestMethod.PUT,
+                    request
+            );
+
+            boolean success = response.has("success") && response.get("success").getAsBoolean();
+            String message = response.has("message") ? response.get("message").getAsString() : "No message provided.";
+
+            if (!success) {
+                System.out.println("Failed to fetch transaction categories: " + message);
+                return false;
+            }
+
+            System.out.println("Success: " + message);
+            return true;
+
+        }catch (IOException e) {
+            System.err.println("Network or I/O error while fetching categories: " + e.getMessage());
+
+        } catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 }

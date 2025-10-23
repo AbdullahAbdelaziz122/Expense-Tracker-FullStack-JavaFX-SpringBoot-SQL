@@ -1,12 +1,12 @@
 package com.example.expense_tracker.controllers;
 
-import com.example.expense_tracker.DTO.ApiResponse;
-import com.example.expense_tracker.DTO.TransactionCategoryRequest;
-import com.example.expense_tracker.DTO.UserTransactionResponse;
+import com.example.expense_tracker.DTO.*;
 import com.example.expense_tracker.exceptions.TransactionCategoryAlreadyExist;
+import com.example.expense_tracker.exceptions.TransactionCategoryNotFound;
 import com.example.expense_tracker.models.TransactionCategory;
 import com.example.expense_tracker.services.TransactionCategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +22,36 @@ public class TransactionCategoryController {
     private static final Logger logger = Logger.getLogger(TransactionCategoryController.class.getName());
 
     private final TransactionCategoryService transactionCategoryService;
+    private final ServerProperties serverProperties;
 
     //get
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getTransactionCategoryById(@PathVariable Long id){
+        try {
+            TransactionCategory transactionCategory = transactionCategoryService.getTransactionCategoryById(id);
+            TransactionCategoryResponse response = new TransactionCategoryResponse(transactionCategory.getId(), transactionCategory.getCategoryName(), transactionCategory.getCategoryColor());
+
+            return ResponseEntity.ok(new ApiResponse<TransactionCategoryResponse>(
+                    true,
+                    "Transaction category found",
+                    response
+            ));
+        }catch (TransactionCategoryNotFound ex){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(
+                    false,
+                    ex.getMessage(),
+                    null
+            ));
+        }catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(
+                    false,
+                    ex.getMessage(),
+                    null
+            ));
+        }
+    }
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getAllTransactionByUserId(@PathVariable Long userId){
         try {
@@ -67,6 +95,31 @@ public class TransactionCategoryController {
             ));
         }catch (Exception ex){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(
+                    false,
+                    ex.getMessage(),
+                    null
+            ));
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateTransactionCategory(@RequestBody UpdateTransactionCategoryRequest request){
+        try {
+            TransactionCategoryResponse response = transactionCategoryService.updateTransactionCategoryById(request);
+
+            return ResponseEntity.ok(new ApiResponse<TransactionCategoryResponse>(
+                    true,
+                    "Transaction category updated successfully",
+                    response
+            ));
+        }catch (TransactionCategoryNotFound ex){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(
+                    false,
+                    "Failed to update: " + ex.getMessage(),
+                    null
+            ));
+        }catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(
                     false,
                     ex.getMessage(),
                     null
