@@ -2,6 +2,7 @@ package org.example.dialogs;
 
 import org.example.Controllers.DashboardController;
 import org.example.models.User;
+import org.example.utils.SqlUtil;
 
 public class ViewOrEditTransactionCategoryDialog extends CustomDialog{
     private DashboardController dashboardController;
@@ -14,7 +15,7 @@ public class ViewOrEditTransactionCategoryDialog extends CustomDialog{
         setTitle("View Categories");
         setWidth(815);
         setHeight(500);
-
+        SqlUtil.getAllTransactionCategoriesByUser(2L);
 //        ScrollPane
     }
 

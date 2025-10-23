@@ -1,14 +1,14 @@
 package org.example.models;
 
-public class TransactionCategories {
+public class TransactionCategory {
     private Long id;
     private String categoryName;
     private String categoryColor;
 
-    public TransactionCategories() {
+    public TransactionCategory() {
     }
 
-    public TransactionCategories(Long id, String categoryName, String categoryColor) {
+    public TransactionCategory(Long id, String categoryName, String categoryColor) {
         this.id = id;
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;

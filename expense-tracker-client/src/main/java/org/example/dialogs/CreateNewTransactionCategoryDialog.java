@@ -49,7 +49,7 @@ public class CreateNewTransactionCategoryDialog extends CustomDialog{
                                 newCategoryTextFiled.getText(),
                                 Utility.convertHexColor(colorPicker)
                 );
-//                handelCreateCategoryResponse(response);
+                handelCreateCategoryResponse(response);
             }
         });
 
