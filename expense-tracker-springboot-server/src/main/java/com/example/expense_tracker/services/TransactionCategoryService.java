@@ -52,16 +52,25 @@ public class TransactionCategoryService {
 
 
     // post
-    public UserTransactionResponse createTransactionCategory(Long userId, String categoryName, String categoryColor){
-        logger.info("Create TransactionCategory with User: "+ userId);
+    public UserTransactionResponse createTransactionCategory(Long userId, String categoryName, String categoryColor) {
+        logger.info(String.format("Creating TransactionCategory for User ID: {}", userId));
 
-        // validation
+        // 1. Validate user
         User user = userService.getUserById(userId);
-        if(transactionCategoryRepository.existsByCategoryName(categoryName)){
+
+
+        // 2. Validate if category already exists for this user
+        UserTransactionResponse existingCategoriesResponse = getTransactionCategoriesByUserId(userId);
+        List<TransactionCategoryResponse> categoryResponseList = existingCategoriesResponse.getCategories();
+
+        boolean alreadyExists = categoryResponseList.stream()
+                .anyMatch(category -> category.getName().equalsIgnoreCase(categoryName));
+
+        if (alreadyExists) {
             throw new TransactionCategoryAlreadyExist(categoryName);
         }
 
-
+        // 3. Create and save new category
         TransactionCategory transactionCategory = new TransactionCategory();
         transactionCategory.setUser(user);
         transactionCategory.setCategoryName(categoryName);
@@ -69,12 +78,15 @@ public class TransactionCategoryService {
 
         TransactionCategory savedCategory = transactionCategoryRepository.save(transactionCategory);
 
-        // response
+        // 4. Build response
         UserResponse userResponse = new UserResponse(user.getId(), user.getName(), user.getEmail());
-        TransactionCategoryResponse transactionCategoryResponse = new TransactionCategoryResponse(savedCategory.getId(), savedCategory.getCategoryName(), savedCategory.getCategoryColor());
-        List<TransactionCategoryResponse> categories = List.of(transactionCategoryResponse);
-        return new UserTransactionResponse(userResponse,categories);
+        TransactionCategoryResponse categoryResponse = new TransactionCategoryResponse(
+                savedCategory.getId(),
+                savedCategory.getCategoryName(),
+                savedCategory.getCategoryColor()
+        );
+
+        return new UserTransactionResponse(userResponse, List.of(categoryResponse));
     }
-
-
+    
 }
