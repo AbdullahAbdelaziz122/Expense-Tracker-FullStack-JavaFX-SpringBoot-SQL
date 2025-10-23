@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import org.example.Controllers.LoginController;
+import org.example.controllers.LoginController;
 import org.example.utils.Utility;
 import org.example.utils.ViewNavigator;
 

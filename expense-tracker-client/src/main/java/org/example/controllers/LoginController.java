@@ -1,4 +1,4 @@
-package org.example.Controllers;
+package org.example.controllers;
 
 import com.google.gson.JsonObject;
 import javafx.event.EventHandler;

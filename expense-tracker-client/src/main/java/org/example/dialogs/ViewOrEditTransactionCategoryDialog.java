@@ -1,8 +1,9 @@
 package org.example.dialogs;
 
-import org.example.Controllers.DashboardController;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.VBox;
+import org.example.controllers.DashboardController;
 import org.example.models.User;
-import org.example.utils.SqlUtil;
 
 public class ViewOrEditTransactionCategoryDialog extends CustomDialog{
     private DashboardController dashboardController;
@@ -15,10 +16,18 @@ public class ViewOrEditTransactionCategoryDialog extends CustomDialog{
         setTitle("View Categories");
         setWidth(815);
         setHeight(500);
-        SqlUtil.getAllTransactionCategoriesByUser(2L);
-//        ScrollPane
+
+        ScrollPane mainContainer = createMainContainerContent();
     }
 
+    private ScrollPane createMainContainerContent(){
+        VBox dialogVBox = new VBox();
+        ScrollPane mainContainer = new ScrollPane(dialogVBox);
+
+
+
+        return mainContainer;
+    }
 
 
 

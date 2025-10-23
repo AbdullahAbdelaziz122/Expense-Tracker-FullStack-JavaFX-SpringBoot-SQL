@@ -1,4 +1,4 @@
-package org.example.Controllers;
+package org.example.controllers;
 
 import com.google.gson.JsonObject;
 import javafx.event.EventHandler;
@@ -8,7 +8,6 @@ import org.example.utils.ApiUtil;
 import org.example.utils.Utility;
 import org.example.views.LoginView;
 import org.example.views.SignUpView;
-import java.net.ConnectException;
 
 
 public class SignUpController {
