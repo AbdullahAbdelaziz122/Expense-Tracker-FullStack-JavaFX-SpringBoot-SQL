@@ -48,18 +48,46 @@ public class SqlUtil {
                     request
             );
 
-            int status = response.get("status").getAsInt();
+            boolean status = response.get("success").getAsBoolean();
 
-            if(status != 201){
-                System.out.println("❌ Create new category failed:" + response.toString());
+            if(!status){
+                System.out.println("❌ Create new category failed:" + response.get("message").toString());
                 return null;
             }
-            System.out.println("✅ Create new category successful" + response.toString());
 
+            System.out.println("✅ Create new category successful" + response.get("message").toString());
             return response;
         }catch (IOException exception){
             exception.getMessage();
             return null;
         }
     }
+
+    public static JsonObject getAllTransactionCategoriesByUser(Long userId){
+
+        try {
+
+            JsonObject response = ApiUtil.fetchApi(
+                    "/api/v1/transaction-category/user/" + userId,
+                    ApiUtil.RequestMethod.GET,
+                    null
+            );
+
+            boolean status = response.get("success").getAsBoolean();
+
+            if(!status){
+                System.out.println("❌ " + response.get("message").toString());
+                return null;
+            }
+
+            System.out.println("✅ Fetched data" + response.get("message").toString());
+            return response;
+
+        }catch (IOException exception){
+            exception.getMessage();
+            return null;
+        }
+
+    }
+
 }

@@ -49,7 +49,7 @@ public class CreateNewTransactionCategoryDialog extends CustomDialog{
                                 newCategoryTextFiled.getText(),
                                 Utility.convertHexColor(colorPicker)
                 );
-                handelCreateCategoryResponse(response);
+//                handelCreateCategoryResponse(response);
             }
         });
 
@@ -58,10 +58,10 @@ public class CreateNewTransactionCategoryDialog extends CustomDialog{
     }
 
     private void handelCreateCategoryResponse(JsonObject response){
-        int status = response.get("status").getAsInt();
+        boolean status = response.get("success").getAsBoolean();
 
-        if(status != 201){
-            Utility.showAlertDialog(Alert.AlertType.ERROR, "Create Failed Due to:\n" + response.get("error").toString());
+        if(!status){
+            Utility.showAlertDialog(Alert.AlertType.ERROR, "Create Failed Due to:\n" + response.get("message").toString());
         }
         Utility.showAlertDialog(Alert.AlertType.INFORMATION, "Category created Successfully");
     }
