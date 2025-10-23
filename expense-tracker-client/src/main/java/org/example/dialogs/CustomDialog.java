@@ -11,8 +11,9 @@ public class CustomDialog extends Dialog {
         this.user = user;
 
         // add styles sheet
-        getDialogPane().getStyleClass().add(getClass().getResource("/style.css").toExternalForm());
-        getDialogPane().getStyleClass().addAll("main-background");
+        getDialogPane().getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+
+        getDialogPane().getStyleClass().add("main-background");
         getDialogPane().getButtonTypes().add(ButtonType.OK);
 
         // Button to enable closing the dialog pane
