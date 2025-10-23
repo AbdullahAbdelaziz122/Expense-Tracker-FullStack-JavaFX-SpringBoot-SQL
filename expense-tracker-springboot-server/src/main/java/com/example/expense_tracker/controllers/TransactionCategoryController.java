@@ -102,6 +102,8 @@ public class TransactionCategoryController {
         }
     }
 
+    // update
+
     @PutMapping
     public ResponseEntity<?> updateTransactionCategory(@RequestBody UpdateTransactionCategoryRequest request){
         try {
@@ -124,6 +126,39 @@ public class TransactionCategoryController {
                     ex.getMessage(),
                     null
             ));
+        }
+    }
+
+    // delete
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTransactionCategory(@PathVariable Long id){
+        try {
+            transactionCategoryService.deleteTransactionCategoryById(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(
+                    new ApiResponse<>(
+                            true,
+                            "Category deleted successfully",
+                            null
+                    )
+            );
+
+        }catch (TransactionCategoryNotFound ex){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ApiResponse<>(
+                            false,
+                            "No category is found with id: "+ id,
+                            null
+                    )
+            );
+        }catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ApiResponse<>(
+                            false,
+                            ex.getMessage(),
+                            null
+                    )
+            );
         }
     }
 }

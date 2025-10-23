@@ -113,4 +113,14 @@ public class TransactionCategoryService {
                 savedCategory.getCategoryColor());
     }
 
+    // delete
+    public void deleteTransactionCategoryById(Long categoryId){
+
+        // validate
+        TransactionCategory category = getTransactionCategoryById(categoryId);
+
+        transactionCategoryRepository.delete(category);
+
+    }
+
 }
