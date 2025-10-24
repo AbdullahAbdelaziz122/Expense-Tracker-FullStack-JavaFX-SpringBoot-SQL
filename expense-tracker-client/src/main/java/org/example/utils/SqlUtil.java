@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SqlUtil {
 
-    public static User getUserByEmail(String email){
+    public static User getUserByEmail(String email) {
         try {
 
 
@@ -22,23 +22,23 @@ public class SqlUtil {
 
             int status = response.get("status").getAsInt();
 
-            if(status != 200){
-                System.out.println("Can't find user with email: "+ email );
+            if (status != 200) {
+                System.out.println("Can't find user with email: " + email);
                 return null;
             }
 
             JsonObject userResponse = response.get("user").getAsJsonObject();
-            System.out.println("User found: "+ response.get("user").toString());
+            System.out.println("User found: " + response.get("user").toString());
             return Utility.responseToUserMapper(userResponse);
 
-        }catch (IOException ex){
+        } catch (IOException ex) {
             ex.getMessage();
             return null;
         }
     }
 
 
-    public static JsonObject postTransactionCategory(Long userId, String categoryName, String categoryColor){
+    public static JsonObject postTransactionCategory(Long userId, String categoryName, String categoryColor) {
         JsonObject request = new JsonObject();
         request.addProperty("userId", userId);
         request.addProperty("categoryName", categoryName);
@@ -55,14 +55,14 @@ public class SqlUtil {
 
             boolean status = response.get("success").getAsBoolean();
 
-            if(!status){
+            if (!status) {
                 System.out.println("Create new category failed:" + response.get("message").toString());
                 return null;
             }
 
             System.out.println("Create new category successful" + response.get("message").toString());
             return response;
-        }catch (IOException exception){
+        } catch (IOException exception) {
             exception.getMessage();
             return null;
         }
@@ -141,7 +141,7 @@ public class SqlUtil {
     }
 
 
-    public static boolean putTransactionCategory(Long categoryId, String newCategoryName, String newCategoryColor){
+    public static boolean putTransactionCategory(Long categoryId, String newCategoryName, String newCategoryColor) {
 
         JsonObject request = new JsonObject();
         request.addProperty("categoryId", categoryId);
@@ -167,7 +167,7 @@ public class SqlUtil {
             System.out.println("Success: " + message);
             return true;
 
-        }catch (IOException e) {
+        } catch (IOException e) {
             System.err.println("Network or I/O error while fetching categories: " + e.getMessage());
 
         } catch (Exception e) {
@@ -177,4 +177,28 @@ public class SqlUtil {
         return false;
     }
 
+    public static boolean deleteTransactionCategory(Long categoryId) {
+        try {
+            JsonObject response = ApiUtil.fetchApi(
+                    "/api/v1/transaction-category/" + categoryId,
+                    ApiUtil.RequestMethod.DELETE,
+                    null
+            );
+
+            boolean success = response.has("success") && response.get("success").getAsBoolean();
+            String message = response.has("message") ? response.get("message").getAsString() : "No message provided.";
+
+            if (!success) {
+                System.out.println("Failed to delete: " + message);
+                return false;
+            }
+
+            System.out.println("Success: " + message);
+            return true;
+
+        } catch (IOException e) {
+            System.err.println("Network or I/O error while fetching categories: " + e.getMessage());
+            return false;
+        }
+    }
 }

@@ -135,7 +135,7 @@ public class TransactionCategoryController {
     public ResponseEntity<?> deleteTransactionCategory(@PathVariable Long id){
         try {
             transactionCategoryService.deleteTransactionCategoryById(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(
+            return ResponseEntity.status(HttpStatus.OK).body(
                     new ApiResponse<>(
                             true,
                             "Category deleted successfully",

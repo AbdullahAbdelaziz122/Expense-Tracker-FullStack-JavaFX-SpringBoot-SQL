@@ -89,6 +89,12 @@ public class CategoryComponent extends HBox {
         deleteBtn = new Button("Delete");
         deleteBtn.setMinWidth(50);
         deleteBtn.getStyleClass().addAll("text-size-sm", "bg-light-red", "text-white");
+        deleteBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+
+            }
+        });
 
 
         // --- Add components ---
