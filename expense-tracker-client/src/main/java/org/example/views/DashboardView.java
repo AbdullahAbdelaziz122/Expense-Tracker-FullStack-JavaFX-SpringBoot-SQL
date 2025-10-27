@@ -51,19 +51,29 @@ public class DashboardView {
         VBox mainContainer = new VBox();
         mainContainer.getStyleClass().addAll("main-background");
 
+
+        VBox mainContainerWrapper = new VBox();
+        mainContainerWrapper.getStyleClass().addAll("dashboard-padding");
+        VBox.setVgrow(mainContainerWrapper, Priority.ALWAYS);
+
+
         HBox balanceSummaryBox = createBalanceSummaryBox();
 
         GridPane gridPane = createGridPane();
         VBox.setVgrow(gridPane, Priority.ALWAYS);
 
-        mainContainer.getChildren().addAll(menuBar, balanceSummaryBox, gridPane);
+        mainContainerWrapper.getChildren().addAll(balanceSummaryBox, gridPane);
+        mainContainer.getChildren().addAll(menuBar, mainContainerWrapper);
         return new Scene(mainContainer, Utility.APP_WIDTH, Utility.APP_HEIGHT);
     }
 
     private GridPane createGridPane() {
         GridPane gridPane = new GridPane();
 
-        
+        //set constraints to the cell of grid pane
+        ColumnConstraints columnConstraints = new ColumnConstraints();
+        columnConstraints.setPercentWidth(50);
+        gridPane.getColumnConstraints().addAll(columnConstraints, columnConstraints);
 
 
 
@@ -71,7 +81,7 @@ public class DashboardView {
         VBox recentTransactionsVBox = createRecentTransactionsVBox();
         recentTransactionsVBox.getStyleClass().addAll("field-background", "rounded-border", "padding-10px");
         GridPane.setVgrow(recentTransactionsVBox, Priority.ALWAYS);
-        gridPane.add(recentTransactionsVBox, 0, 1);
+        gridPane.add(recentTransactionsVBox, 1, 0);
         return gridPane;
     }
 
@@ -95,9 +105,12 @@ public class DashboardView {
         HBox createRecentTransactionsLabelAndAddButtonBox = new HBox();
 
         Label recentTransactions = new Label("Recent Transactions");
+        recentTransactions.getStyleClass().addAll("text-size-lg", "text-light-gray");
 
         Region labelAndButtonSpaceRegion = new Region();
         HBox.setHgrow(labelAndButtonSpaceRegion, Priority.ALWAYS);
+
+        addTransactionButton.getStyleClass().addAll("bg-light-red","text-size-md", "rounded-border", "text-white");
 
         createRecentTransactionsLabelAndAddButtonBox.getChildren().addAll(recentTransactions, labelAndButtonSpaceRegion, addTransactionButton);
 

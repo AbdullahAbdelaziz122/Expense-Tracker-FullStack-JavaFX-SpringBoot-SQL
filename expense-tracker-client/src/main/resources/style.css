@@ -144,3 +144,7 @@ ScrollPane > .viewport{
     -fx-text-fill: #4265c7;
 }
 
+
+.dashboard-padding{
+    -fx-padding: 33px, 43px;
+}
