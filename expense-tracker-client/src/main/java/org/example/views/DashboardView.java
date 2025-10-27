@@ -54,6 +54,7 @@ public class DashboardView {
         HBox balanceSummaryBox = createBalanceSummaryBox();
 
         GridPane gridPane = createGridPane();
+        VBox.setVgrow(gridPane, Priority.ALWAYS);
 
         mainContainer.getChildren().addAll(menuBar, balanceSummaryBox, gridPane);
         return new Scene(mainContainer, Utility.APP_WIDTH, Utility.APP_HEIGHT);
@@ -62,8 +63,14 @@ public class DashboardView {
     private GridPane createGridPane() {
         GridPane gridPane = new GridPane();
 
-        VBox recentTransactionsVBox = createRecentTransactionsVBox();
+        
 
+
+
+        // recent transaction
+        VBox recentTransactionsVBox = createRecentTransactionsVBox();
+        recentTransactionsVBox.getStyleClass().addAll("field-background", "rounded-border", "padding-10px");
+        GridPane.setVgrow(recentTransactionsVBox, Priority.ALWAYS);
         gridPane.add(recentTransactionsVBox, 0, 1);
         return gridPane;
     }
@@ -77,8 +84,8 @@ public class DashboardView {
         // recent transactions scroll pane
         recentTransactionsVBox = new VBox();
         recentTransactionScrollPane = new ScrollPane(recentTransactionVBox);
-
-
+        recentTransactionScrollPane.setFitToWidth(true);
+        recentTransactionScrollPane.setFitToHeight(true);
 
         recentTransactionsVBox.getChildren().addAll(recentTransactionsLabelAndAddButton, recentTransactionScrollPane);
         return recentTransactionsVBox;
