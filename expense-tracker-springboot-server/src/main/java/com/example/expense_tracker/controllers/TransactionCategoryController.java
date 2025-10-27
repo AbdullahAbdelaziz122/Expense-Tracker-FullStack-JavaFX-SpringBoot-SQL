@@ -3,6 +3,7 @@ package com.example.expense_tracker.controllers;
 import com.example.expense_tracker.DTO.*;
 import com.example.expense_tracker.exceptions.TransactionCategoryAlreadyExist;
 import com.example.expense_tracker.exceptions.TransactionCategoryNotFound;
+import com.example.expense_tracker.exceptions.UserNotFoundException;
 import com.example.expense_tracker.models.TransactionCategory;
 import com.example.expense_tracker.services.TransactionCategoryService;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class TransactionCategoryController {
                     response
             ));
         }catch (TransactionCategoryNotFound ex){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(
                     false,
                     ex.getMessage(),
                     null
@@ -68,8 +69,16 @@ public class TransactionCategoryController {
                     true,
                     "Transaction categories retrieved successfully.",
                     userTransactionResponse));
-        }catch (Exception ex){
-            return ResponseEntity.ok(new ApiResponse<>(
+        }catch (UserNotFoundException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(
+                    false,
+                    ex.getMessage(),
+                    null));
+        }
+
+
+        catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(
                     false,
                     ex.getMessage(),
                     null));
@@ -144,7 +153,7 @@ public class TransactionCategoryController {
             );
 
         }catch (TransactionCategoryNotFound ex){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ApiResponse<>(
                             false,
                             "No category is found with id: "+ id,

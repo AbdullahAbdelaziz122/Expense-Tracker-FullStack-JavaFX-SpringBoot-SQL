@@ -115,7 +115,7 @@ public class TransactionCategoryService {
 
     // delete
     public void deleteTransactionCategoryById(Long categoryId){
-
+        logger.info("Deleting Transaction category Id: " + categoryId);
         // validate
         TransactionCategory category = getTransactionCategoryById(categoryId);
 
