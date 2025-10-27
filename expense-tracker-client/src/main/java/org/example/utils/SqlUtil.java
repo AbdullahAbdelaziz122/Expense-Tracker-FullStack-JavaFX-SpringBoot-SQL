@@ -168,7 +168,7 @@ public class SqlUtil {
             return true;
 
         } catch (IOException e) {
-            System.err.println("Network or I/O error while fetching categories: " + e.getMessage());
+            System.err.println("Network or I/O error while update category: " + e.getMessage());
 
         } catch (Exception e) {
             System.err.println("Unexpected error: " + e.getMessage());
@@ -197,7 +197,7 @@ public class SqlUtil {
             return true;
 
         } catch (IOException e) {
-            System.err.println("Network or I/O error while fetching categories: " + e.getMessage());
+            System.err.println("Network or I/O error while deleting categories: " + e.getMessage());
             return false;
         }
     }
