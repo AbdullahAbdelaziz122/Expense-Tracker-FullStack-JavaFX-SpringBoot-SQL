@@ -2,14 +2,8 @@ package org.example.views;
 
 
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import org.example.controllers.DashboardController;
 import org.example.models.User;
 import org.example.utils.Utility;
@@ -23,12 +17,19 @@ public class DashboardView {
     private Label totalExpenseLabel, totalExpense;
     private MenuItem createNewCategoryMenuItem, viewCategoriesMenuItem;
 
+    private Button addTransactionButton;
+    private VBox recentTransactionVBox;
+    private ScrollPane recentTransactionScrollPane;
+
     public DashboardView(User user){
         this.user = user;
 
         currentBalanceLabel = new Label("Current Balance:");
         totalIncomeLabel = new Label("Total Income:");
         totalExpenseLabel = new Label("Total Expense:");
+
+        addTransactionButton = new Button("+");
+
 
         currentBalance = new Label("$0.00");
         totalIncome = new Label("$0.00");
@@ -52,9 +53,49 @@ public class DashboardView {
 
         HBox balanceSummaryBox = createBalanceSummaryBox();
 
+        GridPane gridPane = createGridPane();
 
-        mainContainer.getChildren().addAll(menuBar, balanceSummaryBox);
+        mainContainer.getChildren().addAll(menuBar, balanceSummaryBox, gridPane);
         return new Scene(mainContainer, Utility.APP_WIDTH, Utility.APP_HEIGHT);
+    }
+
+    private GridPane createGridPane() {
+        GridPane gridPane = new GridPane();
+
+        VBox recentTransactionsVBox = createRecentTransactionsVBox();
+
+        gridPane.add(recentTransactionsVBox, 0, 1);
+        return gridPane;
+    }
+
+    private VBox createRecentTransactionsVBox() {
+
+        VBox recentTransactionsVBox = new VBox();
+        HBox recentTransactionsLabelAndAddButton = createRecentTransactionsLabelAndAddButtonBox();
+
+
+        // recent transactions scroll pane
+        recentTransactionsVBox = new VBox();
+        recentTransactionScrollPane = new ScrollPane(recentTransactionVBox);
+
+
+
+        recentTransactionsVBox.getChildren().addAll(recentTransactionsLabelAndAddButton, recentTransactionScrollPane);
+        return recentTransactionsVBox;
+    }
+
+    private HBox createRecentTransactionsLabelAndAddButtonBox() {
+        HBox createRecentTransactionsLabelAndAddButtonBox = new HBox();
+
+        Label recentTransactions = new Label("Recent Transactions");
+
+        Region labelAndButtonSpaceRegion = new Region();
+        HBox.setHgrow(labelAndButtonSpaceRegion, Priority.ALWAYS);
+
+        createRecentTransactionsLabelAndAddButtonBox.getChildren().addAll(recentTransactions, labelAndButtonSpaceRegion, addTransactionButton);
+
+        return createRecentTransactionsLabelAndAddButtonBox;
+
     }
 
     private MenuBar createMenuBar(){

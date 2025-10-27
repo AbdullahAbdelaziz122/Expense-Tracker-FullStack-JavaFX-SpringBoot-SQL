@@ -1,23 +1,25 @@
 /* for debugging */
-/* Label, TextField, Button, PasswordField, ComboBox, DatePicker{
+
+
+/* Label, TextField, Button, PasswordField, ComboBox, DatePicker{*/
+/*    -fx-border-width: 1px;*/
+/*    -fx-border-color: #fff;*/
+/*}*/
+
+ VBox {
     -fx-border-width: 1px;
-    -fx-border-color: #fff;
-} */
+    -fx-border-color: red;
+}
 
-/* VBox {*/
-/*    -fx-border-width: 1px;*/
-/*    -fx-border-color: red;*/
-/*}*/
+HBox {
+    -fx-border-width: 1px;
+    -fx-border-color: blue;
+}
 
-/*HBox {*/
-/*    -fx-border-width: 1px;*/
-/*    -fx-border-color: blue;*/
-/*}*/
-
-/*GridPane {*/
-/*    -fx-border-width: 1px;*/
-/*    -fx-border-color: green;*/
-/*} */
+GridPane {
+    -fx-border-width: 1px;
+    -fx-border-color: green;
+}
 
 
 
