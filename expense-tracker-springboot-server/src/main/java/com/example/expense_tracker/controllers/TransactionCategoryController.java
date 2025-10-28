@@ -41,19 +41,19 @@ public class TransactionCategoryController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getAllTransactionByUserId(@PathVariable Long userId){
 
-            UserTransactionResponse userTransactionResponse = transactionCategoryService.getTransactionCategoriesByUserId(userId);
+            UserTransactionCategoryResponse userTransactionCategoryResponse = transactionCategoryService.getTransactionCategoriesByUserId(userId);
 
-            if(userTransactionResponse.getCategories().isEmpty()){
-                return ResponseEntity.ok(new ApiResponse<UserTransactionResponse>(
+            if(userTransactionCategoryResponse.getCategories().isEmpty()){
+                return ResponseEntity.ok(new ApiResponse<UserTransactionCategoryResponse>(
                         true,
-                        "No Transaction categories found for this user.", userTransactionResponse));
+                        "No Transaction categories found for this user.", userTransactionCategoryResponse));
 
             }
 
-            return ResponseEntity.ok(new ApiResponse<UserTransactionResponse>(
+            return ResponseEntity.ok(new ApiResponse<UserTransactionCategoryResponse>(
                     true,
                     "Transaction categories retrieved successfully.",
-                    userTransactionResponse));
+                    userTransactionCategoryResponse));
 
     }
 
@@ -64,12 +64,12 @@ public class TransactionCategoryController {
 
             logger.info("Creating Transaction Category for : "+ transactionCategoryRequest.categoryName());
 
-            UserTransactionResponse createdTransactionCategory = transactionCategoryService.createTransactionCategory(
+            UserTransactionCategoryResponse createdTransactionCategory = transactionCategoryService.createTransactionCategory(
                     transactionCategoryRequest.userId(),
                     transactionCategoryRequest.categoryName(),
                     transactionCategoryRequest.categoryColor());
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<UserTransactionResponse>(
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<UserTransactionCategoryResponse>(
                     true,
                     "Transaction Category created Successfully",
                     createdTransactionCategory

@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserTransactionResponse {
+public class UserTransactionCategoryResponse {
     private UserResponse user;
-    private List<TransactionResponse> Transactions;
+    private List<TransactionCategoryResponse> categories;
 }

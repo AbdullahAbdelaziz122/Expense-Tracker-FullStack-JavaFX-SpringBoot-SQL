@@ -2,6 +2,9 @@ package com.example.expense_tracker.services;
 
 import com.example.expense_tracker.DTO.TransactionRequest;
 import com.example.expense_tracker.DTO.TransactionResponse;
+import com.example.expense_tracker.DTO.UserResponse;
+import com.example.expense_tracker.DTO.UserTransactionResponse;
+import com.example.expense_tracker.exceptions.TransactionNotFound;
 import com.example.expense_tracker.exceptions.UserCategoryMismatchException;
 import com.example.expense_tracker.models.Transaction;
 import com.example.expense_tracker.models.TransactionCategory;
@@ -10,6 +13,10 @@ import com.example.expense_tracker.repositories.TransactionRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class TransactionService {
@@ -23,7 +30,39 @@ public class TransactionService {
         this.transactionCategoryService = transactionCategoryService;
     }
 
-    
+    // Get
+    public TransactionResponse getTransactionById(Long id){
+        Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new TransactionNotFound(id));
+        return new TransactionResponse(transaction.getId()
+                ,transaction.getName()
+                ,transaction.getAmount()
+                ,transaction.getType()
+                ,transaction.getDate()
+                ,transaction.getUser().getId()
+                ,transaction.getCategory().getId()
+                ,transaction.getCreatedAt());
+    }
+
+    public UserTransactionResponse getAllTransactionByUserId(Long userId){
+        // validate user
+        User user = userService.getUserById(userId);
+        UserResponse userResponse = new UserResponse(user.getId(), user.getName(), user.getEmail());
+
+        // fetch Transaction by User
+        List<Transaction> transactionList = transactionRepository.findAllByUserId(user.getId());
+        List<TransactionResponse> transactionResponses = transactionList.stream()
+                .map(transaction -> new TransactionResponse(transaction.getId()
+                    ,transaction.getName()
+                    ,transaction.getAmount()
+                    ,transaction.getType()
+                    ,transaction.getDate()
+                    ,transaction.getUser().getId()
+                    ,transaction.getCategory().getId()
+                    ,transaction.getCreatedAt())
+                ).toList();
+        return new UserTransactionResponse(userResponse, transactionResponses);
+    }
+
     // post
     public TransactionResponse createTransaction(TransactionRequest transactionRequest){
 

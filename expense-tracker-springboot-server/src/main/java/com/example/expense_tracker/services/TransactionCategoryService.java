@@ -9,7 +9,6 @@ import com.example.expense_tracker.repositories.TransactionCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 @Service
@@ -27,7 +26,7 @@ public class TransactionCategoryService {
 
 
     //get
-    public UserTransactionResponse getTransactionCategoriesByUserId(Long userId){
+    public UserTransactionCategoryResponse getTransactionCategoriesByUserId(Long userId){
         User user = userService.getUserById(userId);
         UserResponse userResponse = new UserResponse(user.getId(), user.getName(), user.getEmail());
 
@@ -37,12 +36,12 @@ public class TransactionCategoryService {
                 cat -> new TransactionCategoryResponse(cat.getId(), cat.getCategoryName(), cat.getCategoryColor())
         ).toList();
 
-        UserTransactionResponse userTransactionResponse = new UserTransactionResponse(
+        UserTransactionCategoryResponse userTransactionCategoryResponse = new UserTransactionCategoryResponse(
                 userResponse,
                 categoryResponses
         );
 
-        return userTransactionResponse;
+        return userTransactionCategoryResponse;
     }
 
     public TransactionCategory getTransactionCategoryByCategoryName(String name){
@@ -56,7 +55,7 @@ public class TransactionCategoryService {
 
 
     // post
-    public UserTransactionResponse createTransactionCategory(Long userId, String categoryName, String categoryColor) {
+    public UserTransactionCategoryResponse createTransactionCategory(Long userId, String categoryName, String categoryColor) {
         logger.info(String.format("Creating TransactionCategory for User ID: {}", userId));
 
         // 1. Validate user
@@ -64,7 +63,7 @@ public class TransactionCategoryService {
 
 
         // 2. Validate if category already exists for this user
-        UserTransactionResponse existingCategoriesResponse = getTransactionCategoriesByUserId(userId);
+        UserTransactionCategoryResponse existingCategoriesResponse = getTransactionCategoriesByUserId(userId);
         List<TransactionCategoryResponse> categoryResponseList = existingCategoriesResponse.getCategories();
 
         boolean alreadyExists = categoryResponseList.stream()
@@ -90,7 +89,7 @@ public class TransactionCategoryService {
                 savedCategory.getCategoryColor()
         );
 
-        return new UserTransactionResponse(userResponse, List.of(categoryResponse));
+        return new UserTransactionCategoryResponse(userResponse, List.of(categoryResponse));
     }
 
     // put
