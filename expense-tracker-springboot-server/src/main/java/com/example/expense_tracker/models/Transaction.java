@@ -37,6 +37,8 @@ public class Transaction {
     @JoinColumn(name = "category_id")
     private TransactionCategory category;
 
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
