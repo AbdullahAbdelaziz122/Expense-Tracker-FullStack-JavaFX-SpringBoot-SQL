@@ -123,4 +123,8 @@ public class TransactionCategoryService {
 
     }
 
+    public boolean haveCategory(Long userId, Long categoryId){
+        return transactionCategoryRepository.existsByIdAndUserId(userId, categoryId);
+    }
+
 }
