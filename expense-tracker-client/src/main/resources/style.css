@@ -148,3 +148,19 @@ ScrollPane > .viewport{
 .dashboard-padding{
     -fx-padding: 33px, 43px;
 }
+
+.date-picker .text-field{
+    -fx-background-color: #515050;
+    -fx-text-fill: #BEB9B9;
+}
+
+
+/*Combo Box 'Transaction Dialog'*/
+.combo-box .list-cell{
+    -fx-background-color: #515050;
+    -fx-text-fill: #BEB9B9;
+}
+
+.combo-box .list-cell:hover{
+    -fx-opacity: 0.5;
+}

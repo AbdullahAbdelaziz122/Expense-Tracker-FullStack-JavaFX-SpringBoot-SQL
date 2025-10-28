@@ -3,10 +3,12 @@ package org.example.utils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.example.models.Transaction;
 import org.example.models.TransactionCategory;
 import org.example.models.User;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -205,5 +207,41 @@ public class SqlUtil {
             System.err.println("Network or I/O error while deleting categories: " + e.getMessage());
             return false;
         }
+    }
+
+    // Transactions
+
+    public static JsonObject postTransaction(Long userId, Long categoryId, String name, Double amount, String date, String type){
+
+        try {
+            // create Request body
+            JsonObject request = new JsonObject();
+            request.addProperty("name", name);
+            request.addProperty("amount", amount);
+            request.addProperty("type", type);
+            request.addProperty("date", date);
+            request.addProperty("userId", userId);
+            request.addProperty("categoryId", categoryId);
+
+
+            JsonObject response = ApiUtil.fetchApi(
+                    "/api/v1/transaction",
+                    ApiUtil.RequestMethod.POST,
+                    request
+            );
+
+            if (response.has("status") && response.get("status").getAsInt() != 201){
+                String error = response.get("error").toString();
+                System.out.println("Failed: "+ error);
+                return null;
+            }
+
+            System.out.println("Success: " + response.get("message").toString());
+
+
+        }catch (IOException ex){
+            return null;
+        }
+        return  null;
     }
 }

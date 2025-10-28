@@ -170,4 +170,8 @@ public class DashboardView {
     public MenuItem getViewCategoriesMenuItem() {
         return viewCategoriesMenuItem;
     }
+
+    public Button getAddTransactionButton() {
+        return addTransactionButton;
+    }
 }
