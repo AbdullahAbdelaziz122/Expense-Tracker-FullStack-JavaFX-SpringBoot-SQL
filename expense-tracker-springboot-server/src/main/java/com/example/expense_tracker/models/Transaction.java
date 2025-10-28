@@ -1,14 +1,13 @@
 package com.example.expense_tracker.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "transactions")
 @Entity
@@ -24,9 +23,14 @@ public class Transaction {
     @Column(nullable = false)
     private double amount;
 
+    @Column(name = "transaction_date")
+    private LocalDate date;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
+
+
     private String type;
 
     @ManyToOne
@@ -36,6 +40,18 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private TransactionCategory category;
+
+
+    // constructor
+    public Transaction(Long id, String name, Double amount, LocalDate date, User user, TransactionCategory category, LocalDateTime createdAt){
+        this.id = id;
+        this.name = name;
+        this.amount = amount;
+        this.date = date;
+        this.user = user;
+        this.category = category;
+        this.createdAt = createdAt;
+    }
 
 
     // Getters and Setters
@@ -59,11 +75,19 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

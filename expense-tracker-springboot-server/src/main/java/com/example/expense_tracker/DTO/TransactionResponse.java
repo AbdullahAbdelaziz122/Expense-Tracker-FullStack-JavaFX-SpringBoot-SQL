@@ -4,6 +4,7 @@ package com.example.expense_tracker.DTO;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,8 +15,8 @@ public class TransactionResponse {
     private String name;
     private double amount;
     private String type;
-    private LocalDate createdAt;
-
+    private LocalDate date;
     private Long userId;
     private Long categoryId;
+    private LocalDateTime createdAt;
 }

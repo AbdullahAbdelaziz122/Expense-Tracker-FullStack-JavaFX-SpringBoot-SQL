@@ -1,4 +1,6 @@
 package com.example.expense_tracker.DTO;
 
-public record TransactionRequest(String name, Double amount, String type, Long userId, Long categoryId) {
+import java.time.LocalDate;
+
+public record TransactionRequest(String name, Double amount, LocalDate date, String type, Long userId, Long categoryId) {
 }

@@ -9,7 +9,7 @@ import com.example.expense_tracker.models.User;
 import com.example.expense_tracker.repositories.TransactionRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 public class TransactionService {
@@ -41,10 +41,11 @@ public class TransactionService {
 
         newTransaction.setName(transactionRequest.name());
         newTransaction.setAmount(transactionRequest.amount());
+        newTransaction.setDate(transactionRequest.date());
         newTransaction.setType(transactionRequest.type());
         newTransaction.setUser(user);
         newTransaction.setCategory(category);
-        newTransaction.setCreatedAt(LocalDate.now());
+        newTransaction.setCreatedAt(LocalDateTime.now());
 
         Transaction savedTransaction = transactionRepository.save(newTransaction);
         return new TransactionResponse(
@@ -52,9 +53,10 @@ public class TransactionService {
                 savedTransaction.getName(),
                 savedTransaction.getAmount(),
                 savedTransaction.getType(),
-                savedTransaction.getCreatedAt(),
+                savedTransaction.getDate(),
                 savedTransaction.getUser().getId(),
-                savedTransaction.getCategory().getId()
+                savedTransaction.getCategory().getId(),
+                savedTransaction.getCreatedAt()
         );
     }
 }
