@@ -35,7 +35,7 @@ public class TransactionController {
     }
 
     //post
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<?> postTransaction(@RequestBody TransactionRequest request){
 
             TransactionResponse response = transactionService.createTransaction(request);
@@ -47,5 +47,26 @@ public class TransactionController {
                             response
                     )
             );
+    }
+
+    //put
+    @PutMapping
+    public ResponseEntity<?> putTransaction(@RequestBody TransactionUpdateRequest request){
+        TransactionResponse response = transactionService.updateTransaction(request);
+        return ResponseEntity.ok().body(new ApiResponse<TransactionResponse>(
+                true,
+                "Transaction updated successfully",
+                response
+        ));
+    }
+
+    @DeleteMapping("/{transaction_id}")
+    public ResponseEntity<?> deleteTransaction(@PathVariable Long transaction_id){
+        transactionService.deleteTransaction(transaction_id);
+        return ResponseEntity.ok().body(new ApiResponse<>(
+                true,
+                "Transaction deleted successfully",
+                null
+        ));
     }
 }

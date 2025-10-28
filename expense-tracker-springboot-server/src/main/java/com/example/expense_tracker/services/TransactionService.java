@@ -1,9 +1,6 @@
 package com.example.expense_tracker.services;
 
-import com.example.expense_tracker.DTO.TransactionRequest;
-import com.example.expense_tracker.DTO.TransactionResponse;
-import com.example.expense_tracker.DTO.UserResponse;
-import com.example.expense_tracker.DTO.UserTransactionResponse;
+import com.example.expense_tracker.DTO.*;
 import com.example.expense_tracker.exceptions.TransactionNotFound;
 import com.example.expense_tracker.exceptions.UserCategoryMismatchException;
 import com.example.expense_tracker.models.Transaction;
@@ -31,16 +28,8 @@ public class TransactionService {
     }
 
     // Get
-    public TransactionResponse getTransactionById(Long id){
-        Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new TransactionNotFound(id));
-        return new TransactionResponse(transaction.getId()
-                ,transaction.getName()
-                ,transaction.getAmount()
-                ,transaction.getType()
-                ,transaction.getDate()
-                ,transaction.getUser().getId()
-                ,transaction.getCategory().getId()
-                ,transaction.getCreatedAt());
+    public Transaction getTransactionById(Long id){
+        return transactionRepository.findById(id).orElseThrow(() -> new TransactionNotFound(id));
     }
 
     public UserTransactionResponse getAllTransactionByUserId(Long userId){
@@ -87,15 +76,45 @@ public class TransactionService {
         newTransaction.setCreatedAt(LocalDateTime.now());
 
         Transaction savedTransaction = transactionRepository.save(newTransaction);
+        return TransactionToResponseMapper(savedTransaction);
+    }
+
+    // update
+    public TransactionResponse updateTransaction(TransactionUpdateRequest request){
+        // validate transaction
+        Transaction oldTransaction = getTransactionById(request.id());
+
+        TransactionCategory category = transactionCategoryService.getTransactionCategoryById(request.categoryId());
+
+        // update transaction
+        oldTransaction.setName(request.name());
+        oldTransaction.setAmount(request.amount());
+        oldTransaction.setType(request.type());
+        oldTransaction.setDate(request.date());
+        oldTransaction.setCategory(category);
+
+        Transaction newTransaction = transactionRepository.save(oldTransaction);
+         return TransactionToResponseMapper(newTransaction);
+    }
+
+
+    // delete
+    public void deleteTransaction(Long id){
+         // validate transaction
+        Transaction transaction = getTransactionById(id);
+        transactionRepository.delete(transaction);
+    }
+
+    private TransactionResponse TransactionToResponseMapper(Transaction transaction){
         return new TransactionResponse(
-                savedTransaction.getId(),
-                savedTransaction.getName(),
-                savedTransaction.getAmount(),
-                savedTransaction.getType(),
-                savedTransaction.getDate(),
-                savedTransaction.getUser().getId(),
-                savedTransaction.getCategory().getId(),
-                savedTransaction.getCreatedAt()
+                transaction.getId(),
+                transaction.getName(),
+                transaction.getAmount(),
+                transaction.getType(),
+                transaction.getDate(),
+                transaction.getUser().getId(),
+                transaction.getCategory().getId(),
+                transaction.getCreatedAt()
         );
     }
 }
