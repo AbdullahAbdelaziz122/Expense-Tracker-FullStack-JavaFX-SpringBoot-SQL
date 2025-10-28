@@ -7,11 +7,15 @@ import com.example.expense_tracker.models.Transaction;
 import com.example.expense_tracker.models.TransactionCategory;
 import com.example.expense_tracker.models.User;
 import com.example.expense_tracker.repositories.TransactionRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -50,6 +54,38 @@ public class TransactionService {
                     ,transaction.getCreatedAt())
                 ).toList();
         return new UserTransactionResponse(userResponse, transactionResponses);
+    }
+
+
+    public PaginatedResponse<TransactionResponse> getRecentTransactionsByUser(Long userId, int page, int size) {
+        userService.getUserById(userId);
+
+        Page<Transaction> transactionsPage = transactionRepository.findAllByUserIdOrderByDateDesc(
+                userId,
+                PageRequest.of(page, size)
+        );
+
+        // Convert Transaction -> TransactionResponse DTO
+        List<TransactionResponse> transactionResponses = transactionsPage.getContent()
+                .stream()
+                .map(tx -> new TransactionResponse(
+                        tx.getId(),
+                        tx.getName(),
+                        tx.getAmount(),
+                        tx.getType(),
+                        tx.getDate(),
+                        tx.getUser().getId(),
+                        tx.getCategory().getId(),
+                        tx.getCreatedAt()
+                )).toList();
+        return new PaginatedResponse<TransactionResponse>(
+                transactionResponses,
+                transactionsPage.getNumber(),
+                transactionsPage.getTotalPages(),
+                transactionsPage.getTotalElements(),
+                transactionsPage.isLast()
+        );
+
     }
 
     // post

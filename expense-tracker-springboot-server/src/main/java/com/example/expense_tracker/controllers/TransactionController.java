@@ -3,6 +3,7 @@ package com.example.expense_tracker.controllers;
 import com.example.expense_tracker.DTO.*;
 import com.example.expense_tracker.services.TransactionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,20 @@ public class TransactionController {
         return ResponseEntity.ok().body(new ApiResponse<>(
                 true,
                 "Transactions found for user: "+ user_id,
+                response
+        ));
+    }
+
+    @GetMapping("/recent/user/{user_id}")
+    public ResponseEntity<?> getRecentTransactions(
+            @PathVariable Long user_id,
+            @RequestParam(defaultValue = "0")int page,
+            @RequestParam(defaultValue = "5")int size
+    ){
+        PaginatedResponse<TransactionResponse> response = transactionService.getRecentTransactionsByUser(user_id, page, size);
+        return ResponseEntity.ok().body(new ApiResponse<PaginatedResponse<TransactionResponse>>(
+                true,
+                "Transactions fetched successfully",
                 response
         ));
     }
