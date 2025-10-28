@@ -117,18 +117,19 @@ public class CreateOrEditTransactionDialog extends CustomDialog{
                     // Extract Data
                     String name = transactionNameField.getText();
                     Double amount = Double.parseDouble(transactionAmountField.getText());
-                    String date = transactionDatePicker.getValue().toString();
+                    LocalDate date = transactionDatePicker.getValue();
                     String type = getSelectedToggleType();
                     String categoryName = transactionCategoryBox.getValue();
                     Long categoryId = findCategoryByName( transactionCategoryList, categoryName);
 
                     System.out.println("Ready for post");
 
-                    // Still unhandled nor checked
-                    //SqlUtil.postTransaction(user.getId(), categoryId, name, amount, type, date);
+                    if(SqlUtil.postTransaction(user.getId(), categoryId, name, amount, date, type)){
+                        Utility.showAlertDialog(Alert.AlertType.INFORMATION, "Transaction created Successfully");
+                        return;
+                    }
                 }
-
-
+                Utility.showAlertDialog(Alert.AlertType.ERROR, "Failed to create Transaction");
             }
         });
 
