@@ -1,9 +1,6 @@
 package com.example.expense_tracker.controllers;
 
 import com.example.expense_tracker.DTO.*;
-import com.example.expense_tracker.exceptions.TransactionCategoryAlreadyExist;
-import com.example.expense_tracker.exceptions.TransactionCategoryNotFound;
-import com.example.expense_tracker.exceptions.UserNotFoundException;
 import com.example.expense_tracker.models.TransactionCategory;
 import com.example.expense_tracker.services.TransactionCategoryService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
 import java.util.logging.Logger;
 
 @RequiredArgsConstructor
@@ -29,7 +26,7 @@ public class TransactionCategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getTransactionCategoryById(@PathVariable Long id){
-        try {
+
             TransactionCategory transactionCategory = transactionCategoryService.getTransactionCategoryById(id);
             TransactionCategoryResponse response = new TransactionCategoryResponse(transactionCategory.getId(), transactionCategory.getCategoryName(), transactionCategory.getCategoryColor());
 
@@ -38,24 +35,12 @@ public class TransactionCategoryController {
                     "Transaction category found",
                     response
             ));
-        }catch (TransactionCategoryNotFound ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(
-                    false,
-                    ex.getMessage(),
-                    null
-            ));
-        }catch (Exception ex){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(
-                    false,
-                    ex.getMessage(),
-                    null
-            ));
-        }
+
     }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getAllTransactionByUserId(@PathVariable Long userId){
-        try {
+
             UserTransactionResponse userTransactionResponse = transactionCategoryService.getTransactionCategoriesByUserId(userId);
 
             if(userTransactionResponse.getCategories().isEmpty()){
@@ -69,27 +54,14 @@ public class TransactionCategoryController {
                     true,
                     "Transaction categories retrieved successfully.",
                     userTransactionResponse));
-        }catch (UserNotFoundException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(
-                    false,
-                    ex.getMessage(),
-                    null));
-        }
 
-
-        catch (Exception ex){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(
-                    false,
-                    ex.getMessage(),
-                    null));
-        }
     }
 
     // post
 
     @PostMapping
     public ResponseEntity<?> createTransactionCategory(@RequestBody TransactionCategoryRequest transactionCategoryRequest){
-        try {
+
             logger.info("Creating Transaction Category for : "+ transactionCategoryRequest.categoryName());
 
             UserTransactionResponse createdTransactionCategory = transactionCategoryService.createTransactionCategory(
@@ -102,20 +74,14 @@ public class TransactionCategoryController {
                     "Transaction Category created Successfully",
                     createdTransactionCategory
             ));
-        }catch (Exception ex){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(
-                    false,
-                    ex.getMessage(),
-                    null
-            ));
-        }
+
     }
 
     // update
 
     @PutMapping
     public ResponseEntity<?> updateTransactionCategory(@RequestBody UpdateTransactionCategoryRequest request){
-        try {
+
             TransactionCategoryResponse response = transactionCategoryService.updateTransactionCategoryById(request);
 
             return ResponseEntity.ok(new ApiResponse<TransactionCategoryResponse>(
@@ -123,26 +89,14 @@ public class TransactionCategoryController {
                     "Transaction category updated successfully",
                     response
             ));
-        }catch (TransactionCategoryNotFound ex){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(
-                    false,
-                    "Failed to update: " + ex.getMessage(),
-                    null
-            ));
-        }catch (Exception ex){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(
-                    false,
-                    ex.getMessage(),
-                    null
-            ));
-        }
+
     }
 
     // delete
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTransactionCategory(@PathVariable Long id){
-        try {
+
             transactionCategoryService.deleteTransactionCategoryById(id);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ApiResponse<>(
@@ -152,22 +106,5 @@ public class TransactionCategoryController {
                     )
             );
 
-        }catch (TransactionCategoryNotFound ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ApiResponse<>(
-                            false,
-                            "No category is found with id: "+ id,
-                            null
-                    )
-            );
-        }catch (Exception ex){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ApiResponse<>(
-                            false,
-                            ex.getMessage(),
-                            null
-                    )
-            );
         }
-    }
 }

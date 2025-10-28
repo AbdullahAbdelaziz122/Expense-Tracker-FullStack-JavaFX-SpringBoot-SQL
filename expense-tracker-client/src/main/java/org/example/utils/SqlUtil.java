@@ -53,9 +53,9 @@ public class SqlUtil {
                     request
             );
 
-            boolean status = response.get("success").getAsBoolean();
+            int status = response.get("status").getAsInt();
 
-            if (!status) {
+            if (status != 201) {
                 System.out.println("Create new category failed:" + response.get("message").toString());
                 return null;
             }
@@ -79,13 +79,15 @@ public class SqlUtil {
                     null
             );
 
-            boolean success = response.has("success") && response.get("success").getAsBoolean();
-            String message = response.has("message") ? response.get("message").getAsString() : "No message provided.";
 
-            if (!success) {
-                System.out.println("Failed to fetch transaction categories: " + message);
+            if (response.has("status") && response.get("status").getAsInt() !=  200){
+                System.out.println(response.get("error").getAsString());
                 return transactionCategories;
             }
+
+
+            boolean success = response.has("success") && response.get("success").getAsBoolean();
+            String message = response.has("message") ? response.get("message").getAsString() : "No message provided.";
 
             System.out.println("Success: " + message);
 
@@ -156,13 +158,14 @@ public class SqlUtil {
                     request
             );
 
+            if (response.has("status") && response.get("status").getAsInt() !=  200){
+                System.out.println(response.get("error").getAsString());
+                return false;
+            }
+
             boolean success = response.has("success") && response.get("success").getAsBoolean();
             String message = response.has("message") ? response.get("message").getAsString() : "No message provided.";
 
-            if (!success) {
-                System.out.println("Failed to fetch transaction categories: " + message);
-                return false;
-            }
 
             System.out.println("Success: " + message);
             return true;
@@ -185,13 +188,15 @@ public class SqlUtil {
                     null
             );
 
+
+            if (response.has("status") && response.get("status").getAsInt() !=  200){
+                System.out.println(response.get("error").getAsString());
+                return false;
+            }
+
             boolean success = response.has("success") && response.get("success").getAsBoolean();
             String message = response.has("message") ? response.get("message").getAsString() : "No message provided.";
 
-            if (!success) {
-                System.out.println("Failed to delete: " + message);
-                return false;
-            }
 
             System.out.println("Success: " + message);
             return true;
