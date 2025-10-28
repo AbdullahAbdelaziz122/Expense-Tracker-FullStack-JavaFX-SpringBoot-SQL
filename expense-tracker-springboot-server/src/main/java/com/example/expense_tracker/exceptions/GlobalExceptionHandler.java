@@ -91,4 +91,16 @@ public class GlobalExceptionHandler {
                 )
         );
     }
+
+
+    @ExceptionHandler(UserCategoryMismatchException.class)
+    public ResponseEntity<Map<String, Object>> handelUserCategoryMismatch(UserCategoryMismatchException ex){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                Map.of(
+                        "error", ex.getMessage(),
+                        "status", HttpStatus.FORBIDDEN.value(),
+                        "timestamp", LocalDateTime.now()
+                )
+        );
+    }
 }

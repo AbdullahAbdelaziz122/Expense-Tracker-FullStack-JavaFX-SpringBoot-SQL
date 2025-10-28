@@ -4,6 +4,7 @@ import com.example.expense_tracker.DTO.ApiResponse;
 import com.example.expense_tracker.DTO.TransactionRequest;
 import com.example.expense_tracker.DTO.TransactionResponse;
 import com.example.expense_tracker.exceptions.TransactionCategoryNotFound;
+import com.example.expense_tracker.exceptions.UserCategoryMismatchException;
 import com.example.expense_tracker.exceptions.UserNotFoundException;
 import com.example.expense_tracker.services.TransactionService;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,10 @@ public class TransactionController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, ex.getMessage(), null));
         }catch (TransactionCategoryNotFound ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, ex.getMessage(), null));
-        }catch(Exception ex){
+        }catch (UserCategoryMismatchException ex){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponse<>(false, ex.getMessage(), null));
+        }
+        catch(Exception ex){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(false, ex.getMessage(), null));
         }
     }

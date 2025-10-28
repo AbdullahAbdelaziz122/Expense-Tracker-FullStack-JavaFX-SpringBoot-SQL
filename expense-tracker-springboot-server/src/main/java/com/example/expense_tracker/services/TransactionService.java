@@ -2,6 +2,7 @@ package com.example.expense_tracker.services;
 
 import com.example.expense_tracker.DTO.TransactionRequest;
 import com.example.expense_tracker.DTO.TransactionResponse;
+import com.example.expense_tracker.exceptions.UserCategoryMismatchException;
 import com.example.expense_tracker.models.Transaction;
 import com.example.expense_tracker.models.TransactionCategory;
 import com.example.expense_tracker.models.User;
@@ -29,6 +30,10 @@ public class TransactionService {
         // validate request
         User user = userService.getUserById(transactionRequest.userId());
         TransactionCategory category = transactionCategoryService.getTransactionCategoryById(transactionRequest.categoryId());
+
+        if(!transactionCategoryService.haveCategory(user.getId(), category.getId())){
+            throw new UserCategoryMismatchException();
+        }
 
         Transaction newTransaction = new Transaction();
 
