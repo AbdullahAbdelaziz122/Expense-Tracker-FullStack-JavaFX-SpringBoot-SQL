@@ -11,5 +11,4 @@ import java.util.Optional;
 public interface TransactionCategoryRepository extends JpaRepository<TransactionCategory, Long> {
     List<TransactionCategory> getTransactionCategoryByUserId(Long userId);
     TransactionCategory getTransactionCategoryByCategoryName (String categoryName);
-    boolean existsByIdAndUserId(Long userId, Long categoryId);
 }

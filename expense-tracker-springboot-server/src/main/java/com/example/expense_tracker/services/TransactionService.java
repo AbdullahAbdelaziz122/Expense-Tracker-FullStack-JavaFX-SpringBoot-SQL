@@ -31,7 +31,9 @@ public class TransactionService {
         User user = userService.getUserById(transactionRequest.userId());
         TransactionCategory category = transactionCategoryService.getTransactionCategoryById(transactionRequest.categoryId());
 
-        if(!transactionCategoryService.haveCategory(user.getId(), category.getId())){
+        boolean haveCategory =transactionCategoryService.haveCategory(user.getId(), category.getId());
+
+        if(!haveCategory){
             throw new UserCategoryMismatchException();
         }
 
