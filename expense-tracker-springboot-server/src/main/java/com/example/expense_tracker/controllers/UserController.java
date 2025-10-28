@@ -4,6 +4,7 @@ package com.example.expense_tracker.controllers;
 import com.example.expense_tracker.DTO.ApiResponse;
 import com.example.expense_tracker.DTO.LoginRequest;
 import com.example.expense_tracker.DTO.RegisterRequest;
+import com.example.expense_tracker.exceptions.UserNotFoundException;
 import com.example.expense_tracker.models.User;
 import com.example.expense_tracker.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,10 @@ public class UserController {
         try{
             User user = userService.getUserById(userId);
             return ResponseEntity.ok(new ApiResponse<User>(true, "User Found", user));
-        }catch (Exception ex){
+        }catch (UserNotFoundException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, ex.getMessage(), null));
+        } catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(false, ex.getMessage(), null));
         }
     }
 
@@ -34,8 +37,10 @@ public class UserController {
         try {
             User user = userService.getUserByEmail(email);
             return ResponseEntity.ok(new ApiResponse<User>(true, "User Found", user));
-        }catch (Exception ex){
-            return ResponseEntity.ok(new ApiResponse<>(false, ex.getMessage(), null));
+        }catch (UserNotFoundException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, ex.getMessage(), null));
+        } catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(false, ex.getMessage(), null));
         }
 
     }
@@ -46,8 +51,10 @@ public class UserController {
         try {
             User user = userService.login(request.email(), request.password());
             return ResponseEntity.ok(new ApiResponse<User>(true, "Login Successful", user));
-        }catch (Exception ex){
-            return ResponseEntity.ok(new ApiResponse<>(false, ex.getMessage(), null));
+        }catch (UserNotFoundException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, ex.getMessage(), null));
+        } catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(false, ex.getMessage(), null));
         }
 
     }
@@ -59,7 +66,7 @@ public class UserController {
             User user = userService.registerUser(request.name(), request.email(), request.password());
             return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<User>(true, "User Created", user));
         }catch (Exception ex){
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(false, ex.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(false, ex.getMessage(), null));
         }
     }
 }
