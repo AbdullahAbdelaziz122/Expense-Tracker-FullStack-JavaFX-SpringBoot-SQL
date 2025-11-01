@@ -6,6 +6,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import org.example.models.User;
 import org.example.utils.ApiUtil;
+import org.example.utils.SqlUtil;
 import org.example.utils.Utility;
 import org.example.views.DashboardView;
 import org.example.views.LoginView;
@@ -45,30 +46,8 @@ public class LoginController {
 
 
     public User login(String email, String password) {
-        JsonObject loginRequest = new JsonObject();
-        loginRequest.addProperty("email", email);
-        loginRequest.addProperty("password", password);
 
-        try {
-            JsonObject response = ApiUtil.fetchApi("/api/v1/user/login", ApiUtil.RequestMethod.POST, loginRequest);
-
-            boolean status = response.get("success").getAsBoolean();
-
-            if (status) {
-                System.out.println("✅ Login successful: " + response);
-                Utility.showAlertDialog(Alert.AlertType.INFORMATION, "Login successful");
-
-                return Utility.responseToUserMapper(response.get("data").getAsJsonObject());
-            } else {
-                System.out.println("❌ Login failed: " + response);
-                Utility.showAlertDialog(Alert.AlertType.ERROR, "Failed to authenticate Due to:\n " + response.get("message"));
-                return null;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("⚠️ Network or connection error: " + e.getMessage());
-            return null;
-        }
+         User user = SqlUtil.login(email, password);
+         return user;
     }
 }

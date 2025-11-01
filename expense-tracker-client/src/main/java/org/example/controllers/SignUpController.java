@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import org.example.utils.ApiUtil;
+import org.example.utils.SqlUtil;
 import org.example.utils.Utility;
 import org.example.views.LoginView;
 import org.example.views.SignUpView;
@@ -65,31 +66,6 @@ public class SignUpController {
     }
 
     private boolean register(String username, String email, String password){
-        JsonObject registerRequest = new JsonObject();
-        registerRequest.addProperty("name", username);
-        registerRequest.addProperty("email", email);
-        registerRequest.addProperty("password", password);
-
-        try {
-            JsonObject response = ApiUtil.fetchApi("/api/v1/user/register", ApiUtil.RequestMethod.POST, registerRequest);
-
-            boolean status = response.get("success").getAsBoolean();
-
-            if (status) {
-                System.out.println("✅ Register user is Successful: " + response);
-                Utility.showAlertDialog(Alert.AlertType.INFORMATION, "Registration successful");
-                return true;
-
-            } else {
-                System.out.println("❌ Register user failed: " + response);
-                Utility.showAlertDialog(Alert.AlertType.ERROR, "Registration Failed Due to:\n" + response.get("message"));
-                return false;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("⚠️ Network or connection error: " + e.getMessage());
-            return false;
-        }
+        return SqlUtil.register(username, email, password);
     }
 }

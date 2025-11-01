@@ -13,10 +13,10 @@ public class JavaFXApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         ViewNavigator.setMainStage(stage);
-//        new LoginView().show();
+        new LoginView().show();
 
-        User fakeUser= new User();
-        fakeUser.setId(1L);
-        new DashboardView(fakeUser).show();
+//        User fakeUser= new User();
+//        fakeUser.setId(1L);
+//        new DashboardView(fakeUser).show();
     }
 }
