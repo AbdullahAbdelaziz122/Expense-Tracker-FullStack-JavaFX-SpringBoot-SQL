@@ -8,6 +8,31 @@ public class Transaction {
     private Double amount;
     private String type;
     private LocalDate date;
+    private TransactionCategory category;
+
+
+
+    // constructor
+    public Transaction() {
+    }
+
+    public Transaction(Long id, String name, Double amount, String type, LocalDate date, TransactionCategory category) {
+        this.id = id;
+        this.name = name;
+        this.amount = amount;
+        this.type = type;
+        this.date = date;
+        this.category = category;
+    }
+
+    // getters and setters
+    public TransactionCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(TransactionCategory category) {
+        this.category = category;
+    }
 
     public LocalDate getDate() {
         return date;
