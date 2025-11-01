@@ -44,14 +44,7 @@ public class TransactionService {
         // fetch Transaction by User
         List<Transaction> transactionList = transactionRepository.findAllByUserId(user.getId());
         List<TransactionResponse> transactionResponses = transactionList.stream()
-                .map(transaction -> new TransactionResponse(transaction.getId()
-                    ,transaction.getName()
-                    ,transaction.getAmount()
-                    ,transaction.getType()
-                    ,transaction.getDate()
-                    ,transaction.getUser().getId()
-                    ,transaction.getCategory().getId()
-                    ,transaction.getCreatedAt())
+                .map(transaction -> (transactionToResponseMapper(transaction))
                 ).toList();
         return new UserTransactionResponse(userResponse, transactionResponses);
     }
@@ -68,15 +61,7 @@ public class TransactionService {
         // Convert Transaction -> TransactionResponse DTO
         List<TransactionResponse> transactionResponses = transactionsPage.getContent()
                 .stream()
-                .map(tx -> new TransactionResponse(
-                        tx.getId(),
-                        tx.getName(),
-                        tx.getAmount(),
-                        tx.getType(),
-                        tx.getDate(),
-                        tx.getUser().getId(),
-                        tx.getCategory().getId(),
-                        tx.getCreatedAt()
+                .map(tx -> (transactionToResponseMapper(tx)
                 )).toList();
         return new PaginatedResponse<TransactionResponse>(
                 transactionResponses,
@@ -112,7 +97,7 @@ public class TransactionService {
         newTransaction.setCreatedAt(LocalDateTime.now());
 
         Transaction savedTransaction = transactionRepository.save(newTransaction);
-        return TransactionToResponseMapper(savedTransaction);
+        return transactionToResponseMapper(savedTransaction);
     }
 
     // update
@@ -130,7 +115,7 @@ public class TransactionService {
         oldTransaction.setCategory(category);
 
         Transaction newTransaction = transactionRepository.save(oldTransaction);
-         return TransactionToResponseMapper(newTransaction);
+         return transactionToResponseMapper(newTransaction);
     }
 
 
@@ -141,7 +126,12 @@ public class TransactionService {
         transactionRepository.delete(transaction);
     }
 
-    private TransactionResponse TransactionToResponseMapper(Transaction transaction){
+    private TransactionResponse transactionToResponseMapper(Transaction transaction){
+        TransactionCategoryResponse categoryResponse = new TransactionCategoryResponse(
+                transaction.getCategory().getId(),
+                transaction.getCategory().getCategoryName(),
+                transaction.getCategory().getCategoryColor()
+        );
         return new TransactionResponse(
                 transaction.getId(),
                 transaction.getName(),
@@ -149,7 +139,7 @@ public class TransactionService {
                 transaction.getType(),
                 transaction.getDate(),
                 transaction.getUser().getId(),
-                transaction.getCategory().getId(),
+                categoryResponse,
                 transaction.getCreatedAt()
         );
     }
