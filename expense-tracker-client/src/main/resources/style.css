@@ -164,3 +164,39 @@ ScrollPane > .viewport{
 .combo-box .list-cell:hover{
     -fx-opacity: 0.5;
 }
+
+/* Transparent ScrollPane background */
+.transparent-scrollpane {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+/* Remove the default white background of the ScrollPane's viewport */
+.transparent-scrollpane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Optional: make scrollbars minimal & modern */
+.transparent-scrollpane .scroll-bar:vertical,
+.transparent-scrollpane .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+/* Style the scrollbar thumb (the draggable bar) */
+.transparent-scrollpane .thumb {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-background-radius: 5px;
+}
+
+/* On hover, make the scrollbar thumb a bit more visible */
+.transparent-scrollpane .thumb:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Remove ugly border when focused */
+.transparent-scrollpane:focused {
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}

@@ -3,21 +3,32 @@ package org.example.controllers;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import org.example.components.TransactionComponent;
 import org.example.dialogs.CreateOrEditTransactionDialog;
+import org.example.models.Transaction;
 import org.example.models.User;
 import org.example.dialogs.CreateNewTransactionCategoryDialog;
 import org.example.dialogs.ViewOrEditTransactionCategoryDialog;
+import org.example.utils.SqlUtil;
 import org.example.views.DashboardView;
+
+import java.util.List;
 
 public class DashboardController {
     private DashboardView dashboardView;
     private User user;
+
+    // recent transactions section
+    private final int recentTransactionSize = 5;
+    private int currentPage;
+
 
     public DashboardController(DashboardView dashboardView, User user){
         this.dashboardView = dashboardView;
         this.user = user;
 
         initialize();
+        createRecentTransactionComponents();
     }
 
     private void initialize(){
@@ -54,4 +65,15 @@ public class DashboardController {
         });
     }
 
+    private void createRecentTransactionComponents(){
+        List<Transaction> transactionsList = SqlUtil.getRecentTransactions(user.getId(), 0, 5);
+
+        if (transactionsList.isEmpty()) return;
+
+        for (Transaction transaction : transactionsList){
+            dashboardView.getRecentTransactionVBox().getChildren().add(
+                    new TransactionComponent(this, transaction)
+            );
+        }
+    }
 }

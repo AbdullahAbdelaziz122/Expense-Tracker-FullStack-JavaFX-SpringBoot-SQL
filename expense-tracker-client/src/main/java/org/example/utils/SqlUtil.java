@@ -65,7 +65,8 @@ public class SqlUtil {
             return Utility.responseToUserMapper(userResponse);
 
         } catch (IOException ex) {
-            ex.getMessage();
+            ex.printStackTrace();
+            System.out.println("⚠️ Network or connection error: " + ex.getMessage());
             return null;
         }
     }
@@ -126,7 +127,8 @@ public class SqlUtil {
             System.out.println("Create new category successful" + response.get("message").toString());
             return response;
         } catch (IOException exception) {
-            exception.getMessage();
+            exception.printStackTrace();
+            System.out.println("⚠️ Network or connection error: " + exception.getMessage());
             return null;
         }
     }
@@ -148,26 +150,18 @@ public class SqlUtil {
                 return transactionCategories;
             }
 
-
-            boolean success = response.has("success") && response.get("success").getAsBoolean();
             String message = response.has("message") ? response.get("message").getAsString() : "No message provided.";
 
             System.out.println("Success: " + message);
 
             // Extract "data"
-            if (!response.has("data") || response.get("data").isJsonNull()) {
-                System.out.println("No 'data' field found in response.");
-                return transactionCategories;
-            }
-
             JsonObject data = response.get("data").getAsJsonObject();
 
             // Optional: extract user info (for logging or use)
-            if (data.has("user")) {
-                JsonObject user = data.get("user").getAsJsonObject();
-                System.out.println("User: " + user.get("name").getAsString() + " (" + user.get("email").getAsString() + ")");
-            }
-
+//            if (data.has("user")) {
+//                JsonObject user = data.get("user").getAsJsonObject();
+//                System.out.println("User: " + user.get("name").getAsString() + " (" + user.get("email").getAsString() + ")");
+//            }
             // Extract categories array
             if (!data.has("categories")) {
                 System.out.println("No categories found for this user.");
@@ -300,4 +294,132 @@ public class SqlUtil {
             return false;
         }
     }
+
+    public static List<Transaction> getUserTransactions(int userId){
+
+        try {
+            JsonObject response = ApiUtil.fetchApi(
+                    "/api/v1/transaction/"+userId,
+                    ApiUtil.RequestMethod.GET,
+                    null
+            );
+            var transactions = new ArrayList<Transaction>();
+
+            if (response.has("status") && response.get("status").getAsInt() != 200){
+                String error = response.get("error").toString();
+                System.out.println("Failed: "+ error);
+                Utility.showAlertDialog(Alert.AlertType.ERROR, "Something went wrong:\n"+error);
+                return transactions;
+            }
+
+            System.out.println("Success: " + response.get("message").toString());
+
+            // Extract "data"
+            if (!response.has("data") || response.get("data").isJsonNull()) {
+                System.out.println("No 'data' field found in response.");
+                return transactions;
+            }
+
+            JsonObject data = response.get("data").getAsJsonObject();
+
+            if(data.isJsonNull()){
+                System.out.println("User doesn't have transactions");
+                return transactions;
+            }
+
+            JsonArray transactionsList = data.get("transactions").getAsJsonArray();
+
+            if(transactionsList.isEmpty()){
+                System.out.println("User doesn't have transactions");
+                return transactions;
+            }
+
+            // parse the transactions
+            parseTransactionsList(transactions, transactionsList);
+            System.out.println("Fetched " + transactions.size() + " categories.");
+            return transactions;
+
+        }catch (IOException ex){
+            ex.printStackTrace();
+            System.out.println("⚠️ Network or connection error: " + ex.getMessage());
+            Utility.showAlertDialog(Alert.AlertType.ERROR, "ConnectionError\nCheck connection and refresh");
+            return new ArrayList<Transaction>();
+        }
+
+    }
+
+
+    public static List<Transaction> getRecentTransactions(Long userId, int page, int size){
+        try {
+
+            JsonObject response = ApiUtil.fetchApi(
+                    "/api/v1/transaction/recent/user/"+userId+"?page="+page+"&size="+size,
+                    ApiUtil.RequestMethod.GET,
+                    null
+            );
+
+            var transactions = new ArrayList<Transaction>();
+
+            if (response.has("status") && response.get("status").getAsInt() != 200){
+                String error = response.get("error").toString();
+                System.out.println("Failed: "+ error);
+                Utility.showAlertDialog(Alert.AlertType.ERROR, "Something went wrong:\n"+error);
+                return transactions;
+            }
+
+            System.out.println("Success: " + response.get("message").toString());
+
+            // Extract "data"
+            if (!response.has("data") || response.get("data").isJsonNull()) {
+                System.out.println("No 'data' field found in response.");
+                return transactions;
+            }
+
+            JsonObject data = response.get("data").getAsJsonObject();
+
+            if(data.isJsonNull()){
+                System.out.println("User doesn't have transactions");
+                return transactions;
+            }
+
+            JsonArray content = data.get("content").getAsJsonArray();
+
+            // parse data
+            parseTransactionsList(transactions, content);
+
+            return transactions;
+        }catch (IOException ex){
+            ex.printStackTrace();
+            System.out.println("⚠️ Network or connection error: " + ex.getMessage());
+            Utility.showAlertDialog(Alert.AlertType.ERROR, "ConnectionError\nCheck connection and refresh");
+            return new ArrayList<Transaction>();
+        }
+
+    }
+
+    private static void parseTransactionsList(ArrayList<Transaction> transactions, JsonArray content) {
+        for(JsonElement transaction: content){
+            JsonObject transactionObj = transaction.getAsJsonObject();
+            Long id = transactionObj.get("id").getAsLong();
+            String name = transactionObj.get("name").getAsString();
+            Double amount = transactionObj.get("amount").getAsDouble();
+            String type = transactionObj.get("type").getAsString();
+
+            // Parse LocalDate
+            String dateStr = transactionObj.get("date").getAsString();
+            LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE);
+
+            // Parse Category
+            JsonObject categoryObj = transactionObj.get("category").getAsJsonObject();
+            TransactionCategory category = new TransactionCategory(
+                    categoryObj.get("id").getAsLong(),
+                    categoryObj.get("name").getAsString(),
+                    categoryObj.get("color").getAsString()
+            );
+
+            // Create Transaction object
+            transactions.add(new Transaction(id, name, amount, type, date, category));
+        }
+    }
+
 }

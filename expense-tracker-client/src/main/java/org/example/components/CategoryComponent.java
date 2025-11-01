@@ -54,9 +54,6 @@ public class CategoryComponent extends HBox {
         colorPicker.getStyleClass().addAll("text-size-sm");
 
         // --- Buttons ---
-
-
-
         editBtn = new Button("Edit");
         editBtn.setMinWidth(50);
         editBtn.getStyleClass().addAll("text-size-sm");

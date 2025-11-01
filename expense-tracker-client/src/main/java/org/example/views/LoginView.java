@@ -65,6 +65,8 @@ public class LoginView {
     }
 
 
+
+    // getters and setters
     public TextField getUsernameField() {
         return usernameField;
     }

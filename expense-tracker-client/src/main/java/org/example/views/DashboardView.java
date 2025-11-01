@@ -86,20 +86,30 @@ public class DashboardView {
     }
 
     private VBox createRecentTransactionsVBox() {
+        // Container for the entire "Recent Transactions" section
+        VBox containerVBox = new VBox();
 
-        VBox recentTransactionsVBox = new VBox();
-        HBox recentTransactionsLabelAndAddButton = createRecentTransactionsLabelAndAddButtonBox();
+        // Header with label + add button
+        HBox headerBox = createRecentTransactionsLabelAndAddButtonBox();
 
+        // Inner VBox that will actually hold the transaction items
+        recentTransactionVBox = new VBox();
+        recentTransactionVBox.setSpacing(8); // small gap between transaction rows
 
-        // recent transactions scroll pane
-        recentTransactionsVBox = new VBox();
+        // Scroll pane wrapping the transaction list
         recentTransactionScrollPane = new ScrollPane(recentTransactionVBox);
         recentTransactionScrollPane.setFitToWidth(true);
         recentTransactionScrollPane.setFitToHeight(true);
+        recentTransactionScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        recentTransactionScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        recentTransactionScrollPane.getStyleClass().add("transparent-scrollpane");
 
-        recentTransactionsVBox.getChildren().addAll(recentTransactionsLabelAndAddButton, recentTransactionScrollPane);
-        return recentTransactionsVBox;
+        // Add header and scrollpane to the container
+        containerVBox.getChildren().addAll(headerBox, recentTransactionScrollPane);
+
+        return containerVBox;
     }
+
 
     private HBox createRecentTransactionsLabelAndAddButtonBox() {
         HBox createRecentTransactionsLabelAndAddButtonBox = new HBox();
@@ -173,5 +183,9 @@ public class DashboardView {
 
     public Button getAddTransactionButton() {
         return addTransactionButton;
+    }
+
+    public VBox getRecentTransactionVBox() {
+        return recentTransactionVBox;
     }
 }
