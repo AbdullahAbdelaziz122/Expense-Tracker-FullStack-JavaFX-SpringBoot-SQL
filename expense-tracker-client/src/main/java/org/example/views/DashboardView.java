@@ -52,12 +52,13 @@ public class DashboardView {
         mainContainer.getStyleClass().addAll("main-background");
 
 
-        VBox mainContainerWrapper = new VBox();
+        VBox mainContainerWrapper = new VBox(30);
         mainContainerWrapper.getStyleClass().addAll("dashboard-padding");
         VBox.setVgrow(mainContainerWrapper, Priority.ALWAYS);
 
 
         HBox balanceSummaryBox = createBalanceSummaryBox();
+
 
         GridPane gridPane = createGridPane();
         VBox.setVgrow(gridPane, Priority.ALWAYS);
@@ -141,7 +142,6 @@ public class DashboardView {
 
     private HBox createBalanceSummaryBox(){
         HBox balanceSummaryBox = new HBox();
-
         VBox currentBalanceVBox = new VBox();
         currentBalanceLabel.getStyleClass().addAll("text-size-lg", "text-light-gray");
         currentBalance.getStyleClass().addAll("text-size-lg", "text-white");
