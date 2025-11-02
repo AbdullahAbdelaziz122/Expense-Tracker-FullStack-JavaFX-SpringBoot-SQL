@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import org.example.controllers.DashboardController;
 import org.example.models.Transaction;
+import org.example.utils.SqlUtil;
 import org.example.utils.Utility;
 
 public class TransactionComponent extends HBox {
@@ -86,7 +87,9 @@ public class TransactionComponent extends HBox {
         delButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-
+                SqlUtil.deleteTransaction(transaction.getId());
+                setVisible(false);
+                setManaged(false);
             }
         });
         buttonsContainer.getChildren().addAll(editButton, delButton);

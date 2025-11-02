@@ -422,4 +422,30 @@ public class SqlUtil {
         }
     }
 
+    public static boolean deleteTransaction(Long transactionId){
+
+        try {
+            JsonObject response = ApiUtil.fetchApi(
+                    "/api/v1/transaction/"+transactionId,
+                    ApiUtil.RequestMethod.DELETE,
+                    null
+            );
+
+            if (response.has("status") && response.get("status").getAsInt() != 200){
+                String error = response.get("error").toString();
+                System.out.println("Failed: "+ error);
+                Utility.showAlertDialog(Alert.AlertType.ERROR, "Something went wrong:\n"+error);
+                return false;
+            }
+
+            if(response.has("success") && response.get("success").getAsBoolean())
+            System.out.println("Success: " + response.get("message").toString());
+            return true;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            System.out.println("⚠️ Network or connection error: " + ex.getMessage());
+            Utility.showAlertDialog(Alert.AlertType.ERROR, "ConnectionError\nCheck connection and refresh");
+            return false;
+        }
+    }
 }
