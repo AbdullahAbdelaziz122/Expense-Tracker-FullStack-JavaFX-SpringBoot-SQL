@@ -66,7 +66,7 @@ public class DashboardController {
     }
 
     private void createRecentTransactionComponents(){
-        List<Transaction> transactionsList = SqlUtil.getRecentTransactions(user.getId(), 0, 5);
+        List<Transaction> transactionsList = SqlUtil.getRecentTransactions(user.getId(), 0, 10);
 
         if (transactionsList.isEmpty()) return;
 

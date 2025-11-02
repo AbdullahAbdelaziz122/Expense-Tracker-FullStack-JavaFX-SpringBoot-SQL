@@ -93,8 +93,8 @@ public class DashboardView {
         HBox headerBox = createRecentTransactionsLabelAndAddButtonBox();
 
         // Inner VBox that will actually hold the transaction items
-        recentTransactionVBox = new VBox();
-        recentTransactionVBox.setSpacing(8); // small gap between transaction rows
+        recentTransactionVBox = new VBox(10);
+        recentTransactionVBox.setSpacing(8);
 
         // Scroll pane wrapping the transaction list
         recentTransactionScrollPane = new ScrollPane(recentTransactionVBox);
