@@ -1,8 +1,10 @@
 package org.example.components;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -46,10 +48,10 @@ public class TransactionComponent extends HBox {
         }
 
 
-        
+        HBox actionButtons = createActionButtons();
 
 
-        this.getChildren().addAll(categoryNameDateSection, spacer, transactionAmount);
+        this.getChildren().addAll(categoryNameDateSection, spacer, transactionAmount, actionButtons);
 
     }
 
@@ -70,5 +72,24 @@ public class TransactionComponent extends HBox {
 
         mainContainer.getChildren().addAll(transactionCategory, transactionName, transactionDate);
         return mainContainer;
+    }
+
+    private HBox createActionButtons(){
+        HBox buttonsContainer = new HBox(10);
+        buttonsContainer.setAlignment(Pos.CENTER);
+
+        editButton = new Button("Edit");
+        editButton.getStyleClass().addAll("text-size-md", "rounded-border");
+        delButton = new Button("Del");
+        delButton.getStyleClass().addAll("text-size-md", "rounded-border", "text-white", "bg-light-red");
+
+        delButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+
+            }
+        });
+        buttonsContainer.getChildren().addAll(editButton, delButton);
+        return buttonsContainer;
     }
 }
