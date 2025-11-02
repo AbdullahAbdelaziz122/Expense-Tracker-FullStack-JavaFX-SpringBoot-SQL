@@ -14,11 +14,10 @@ public class ViewOrEditTransactionCategoryDialog extends CustomDialog{
     private DashboardController dashboardController;
     private User user;
 
-    public ViewOrEditTransactionCategoryDialog(User user, DashboardController dashboardController){
-        super(user);
-        this.user = user;
+    public ViewOrEditTransactionCategoryDialog(DashboardController dashboardController){
+        super(dashboardController);
         this.dashboardController = dashboardController;
-
+        this.user = dashboardController.getUser();
         // Configure the dialog
         setTitle("View Categories");
         setWidth(815);

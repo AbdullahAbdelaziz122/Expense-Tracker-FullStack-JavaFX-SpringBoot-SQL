@@ -295,6 +295,43 @@ public class SqlUtil {
         }
     }
 
+
+    public static boolean putTransaction(Long transactionId, String transactionName, Double transactionAmount, String transactionType,
+                                         LocalDate date, Long categoryId){
+        try {
+            JsonObject request = new JsonObject();
+            request.addProperty("id", transactionId);
+            request.addProperty("name", transactionName);
+            request.addProperty("amount", transactionAmount);
+            request.addProperty("type", transactionType);
+            request.addProperty("date", date.format(DateTimeFormatter.ISO_DATE));
+            request.addProperty("categoryId", categoryId);
+
+            JsonObject response = ApiUtil.fetchApi(
+                    "/api/v1/transaction",
+                    ApiUtil.RequestMethod.PUT,
+                    request
+            );
+
+            if (response.has("status") && response.get("status").getAsInt() != 200){
+                String error = response.get("error").toString();
+                System.out.println("Failed: "+ error);
+                Utility.showAlertDialog(Alert.AlertType.ERROR, "Something went wrong:\n"+error);
+                return false;
+            }
+
+            if(response.has("success") && response.get("success").getAsBoolean())
+                System.out.println("Success: " + response.get("message").toString());
+            return true;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            System.out.println("⚠️ Network or connection error: " + ex.getMessage());
+            Utility.showAlertDialog(Alert.AlertType.ERROR, "ConnectionError\nCheck connection and refresh");
+            return false;
+        }
+    }
+
+
     public static List<Transaction> getUserTransactions(int userId){
 
         try {

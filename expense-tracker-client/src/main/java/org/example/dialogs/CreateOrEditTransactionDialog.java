@@ -7,6 +7,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.example.components.TransactionComponent;
+import org.example.controllers.DashboardController;
 import org.example.models.Transaction;
 import org.example.models.TransactionCategory;
 import org.example.models.User;
@@ -27,11 +29,18 @@ public class CreateOrEditTransactionDialog extends CustomDialog{
     private ToggleGroup transactionTypeToggleGroup;
 
     private boolean isEditing;
+    private DashboardController dashboardController;
+    private TransactionComponent transactionComponent;
 
-    public CreateOrEditTransactionDialog(User user, boolean isEditing) {
-        super(user);
-        this.user = user;
+    public CreateOrEditTransactionDialog(DashboardController dashboardController,
+                                         TransactionComponent transactionComponent,
+                                         boolean isEditing) {
+        super(dashboardController);
+
+        this.dashboardController = dashboardController;
+        this.user = dashboardController.getUser();
         this.isEditing = isEditing;
+        this.transactionComponent = transactionComponent;
 
         setTitle(isEditing ? "Editing Transaction" : "Create New Transaction");
         setHeight(595);
@@ -71,6 +80,14 @@ public class CreateOrEditTransactionDialog extends CustomDialog{
             transactionCategoryBox.getItems().add(category.getCategoryName());
         }
 
+        if (isEditing){
+            Transaction transaction = transactionComponent.getTransaction();
+            transactionNameField.setText(transaction.getName());
+            transactionAmountField.setText(String.valueOf(transaction.getAmount()));
+            transactionDatePicker.setValue(transaction.getDate());
+            transactionCategoryBox.setValue(transaction.getCategory() == null ? "Undefined": transaction.getCategory().getCategoryName());
+
+        }
 
         mainContainerVBox.getChildren()
                 .addAll(transactionNameField
@@ -97,6 +114,14 @@ public class CreateOrEditTransactionDialog extends CustomDialog{
         expenseRadioButton.setToggleGroup(transactionTypeToggleGroup);
         expenseRadioButton.getStyleClass().addAll("text-size-md", "text-light-gray");
 
+        if (isEditing){
+            Transaction transaction = transactionComponent.getTransaction();
+            if(transaction.getType().equalsIgnoreCase("Income")){
+                incomeRadioButton.setSelected(true);
+            }else{
+                expenseRadioButton.setSelected(true);
+            }
+        }
         radioButtonBox.getChildren().addAll(incomeRadioButton, expenseRadioButton);
         return radioButtonBox;
     }
@@ -112,9 +137,9 @@ public class CreateOrEditTransactionDialog extends CustomDialog{
         saveButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-
                 if (validate()){
                     // Extract Data
+
                     String name = transactionNameField.getText();
                     Double amount = Double.parseDouble(transactionAmountField.getText());
                     LocalDate date = transactionDatePicker.getValue();
@@ -123,13 +148,20 @@ public class CreateOrEditTransactionDialog extends CustomDialog{
                     Long categoryId = findCategoryByName( transactionCategoryList, categoryName);
 
                     System.out.println("Ready for post");
+                    if(!isEditing) {
+                        if (SqlUtil.postTransaction(user.getId(), categoryId, name, amount, date, type)) {
+                            Utility.showAlertDialog(Alert.AlertType.INFORMATION, "Transaction created Successfully");
+                            return;
+                        }
+                    }else{
 
-                    if(SqlUtil.postTransaction(user.getId(), categoryId, name, amount, date, type)){
-                        Utility.showAlertDialog(Alert.AlertType.INFORMATION, "Transaction created Successfully");
-                        return;
+                        if(SqlUtil.putTransaction(transactionComponent.getTransaction().getId(), name, amount, type, date, categoryId)){
+                            Utility.showAlertDialog(Alert.AlertType.INFORMATION, "Transaction Updated Successfully");
+                            return;
+                        }
                     }
                 }
-                Utility.showAlertDialog(Alert.AlertType.ERROR, "Failed to create Transaction");
+                Utility.showAlertDialog(Alert.AlertType.ERROR, isEditing ? "Failed to update Transaction": "Failed to create Transaction");
             }
         });
 

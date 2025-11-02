@@ -3,12 +3,13 @@ package org.example.dialogs;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import org.example.controllers.DashboardController;
 import org.example.models.User;
 
 public class CustomDialog extends Dialog {
-    private User user;
-    public CustomDialog(User user){
-        this.user = user;
+    private DashboardController dashboardController;
+    public CustomDialog(DashboardController dashboardController){
+        this.dashboardController = dashboardController;
 
         // add styles sheet
         getDialogPane().getStylesheets().add(getClass().getResource("/style.css").toExternalForm());

@@ -8,6 +8,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import org.example.controllers.DashboardController;
 import org.example.models.User;
 import org.example.utils.SqlUtil;
 import org.example.utils.Utility;
@@ -17,10 +18,10 @@ public class CreateNewTransactionCategoryDialog extends CustomDialog{
     private ColorPicker colorPicker;
     private Button createCategoryBtn;
     private User user;
-
-    public CreateNewTransactionCategoryDialog(User user){
-        super(user);
-        this.user = user;
+    private DashboardController dashboardController;
+    public CreateNewTransactionCategoryDialog(DashboardController dashboardController){
+        super(dashboardController);
+        this.user = dashboardController.getUser();
         setTitle("Create New Category");
         getDialogPane().setContent(createDialogContentBox());
     }

@@ -7,6 +7,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import org.example.controllers.DashboardController;
+import org.example.dialogs.CreateOrEditTransactionDialog;
 import org.example.models.Transaction;
 import org.example.utils.SqlUtil;
 
@@ -71,6 +72,14 @@ public class TransactionComponent extends HBox {
         editButton = new Button("Edit");
         editButton.getStyleClass().addAll("text-size-md", "rounded-border");
 
+        editButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                new CreateOrEditTransactionDialog(dashboardController, TransactionComponent.this, true).showAndWait();
+            }
+        });
+
+
         delButton = new Button("Del");
         delButton.getStyleClass().addAll("text-size-md", "rounded-border", "text-white", "bg-light-red");
 
@@ -103,5 +112,9 @@ public class TransactionComponent extends HBox {
 
         buttonsContainer.getChildren().addAll(editButton, delButton);
         return buttonsContainer;
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
     }
 }

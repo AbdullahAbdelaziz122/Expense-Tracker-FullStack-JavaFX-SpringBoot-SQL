@@ -42,7 +42,7 @@ public class DashboardController {
         dashboardView.getAddTransactionButton().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                new CreateOrEditTransactionDialog(user, false).showAndWait();
+                new CreateOrEditTransactionDialog(DashboardController.this, null,false).showAndWait();
             }
         });
     }
@@ -52,7 +52,7 @@ public class DashboardController {
             @Override
             public void handle(ActionEvent actionEvent) {
 
-                new CreateNewTransactionCategoryDialog(user).showAndWait();
+                new CreateNewTransactionCategoryDialog(DashboardController.this).showAndWait();
             }
         });
 
@@ -60,7 +60,7 @@ public class DashboardController {
         dashboardView.getViewCategoriesMenuItem().setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                new ViewOrEditTransactionCategoryDialog(user, DashboardController.this).showAndWait();
+                new ViewOrEditTransactionCategoryDialog(DashboardController.this).showAndWait();
             }
         });
     }
@@ -75,5 +75,9 @@ public class DashboardController {
                     new TransactionComponent(this, transaction)
             );
         }
+    }
+
+    public User getUser() {
+        return user;
     }
 }
