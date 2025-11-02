@@ -1,9 +1,12 @@
 package org.example.views;
 
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import org.example.animations.LoadingAnimationPane;
 import org.example.controllers.DashboardController;
 import org.example.models.User;
 import org.example.utils.Utility;
@@ -21,9 +24,11 @@ public class DashboardView {
     private VBox recentTransactionVBox;
     private ScrollPane recentTransactionScrollPane;
 
+    private LoadingAnimationPane loadingAnimationPane;
+
     public DashboardView(User user){
         this.user = user;
-
+        loadingAnimationPane = new LoadingAnimationPane(Utility.APP_WIDTH, Utility.APP_HEIGHT);
         currentBalanceLabel = new Label("Current Balance:");
         totalIncomeLabel = new Label("Total Income:");
         totalExpenseLabel = new Label("Total Expense:");
@@ -42,7 +47,28 @@ public class DashboardView {
         Scene scene = createScene();
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         new DashboardController(this, user);
+
+        // check for changing in width or height before switching the scenes
+        updateWidthAndHeight(scene);
+
+
         ViewNavigator.switchScene(scene);
+    }
+
+    private void updateWidthAndHeight(Scene scene) {
+        scene.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                loadingAnimationPane.resizeWidth((double) t1);
+            }
+        });
+
+        scene.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                loadingAnimationPane.resizeHeight((double) t1);
+            }
+        });
     }
 
     private Scene createScene(){
@@ -64,7 +90,7 @@ public class DashboardView {
         VBox.setVgrow(gridPane, Priority.ALWAYS);
 
         mainContainerWrapper.getChildren().addAll(balanceSummaryBox, gridPane);
-        mainContainer.getChildren().addAll(menuBar, mainContainerWrapper);
+        mainContainer.getChildren().addAll(menuBar, mainContainerWrapper, loadingAnimationPane);
         return new Scene(mainContainer, Utility.APP_WIDTH, Utility.APP_HEIGHT);
     }
 
@@ -187,5 +213,9 @@ public class DashboardView {
 
     public VBox getRecentTransactionVBox() {
         return recentTransactionVBox;
+    }
+
+    public LoadingAnimationPane getLoadingAnimationPane() {
+        return loadingAnimationPane;
     }
 }

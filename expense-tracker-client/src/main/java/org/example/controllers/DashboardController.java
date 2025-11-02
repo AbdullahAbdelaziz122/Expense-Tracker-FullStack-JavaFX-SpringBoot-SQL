@@ -17,7 +17,6 @@ import java.util.List;
 public class DashboardController {
     private DashboardView dashboardView;
     private User user;
-
     // recent transactions section
     private final int recentTransactionSize = 5;
     private int currentPage;
@@ -26,9 +25,8 @@ public class DashboardController {
     public DashboardController(DashboardView dashboardView, User user){
         this.dashboardView = dashboardView;
         this.user = user;
-
         initialize();
-        createRecentTransactionComponents();
+        fetchUserData();
     }
 
     private void initialize(){
@@ -36,6 +34,25 @@ public class DashboardController {
         addMenuActions();
         addRecentTransactionAction();
 
+    }
+
+    private void fetchUserData(){
+        // load the Loading Animations
+        dashboardView.getLoadingAnimationPane().setVisible(true);
+
+        createRecentTransactionComponents();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                    dashboardView.getLoadingAnimationPane().setVisible(false);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void addRecentTransactionAction() {
