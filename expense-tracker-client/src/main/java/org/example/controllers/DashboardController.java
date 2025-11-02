@@ -11,6 +11,7 @@ import org.example.dialogs.CreateNewTransactionCategoryDialog;
 import org.example.dialogs.ViewOrEditTransactionCategoryDialog;
 import org.example.utils.SqlUtil;
 import org.example.views.DashboardView;
+import org.example.views.LoginView;
 
 import java.util.List;
 
@@ -78,6 +79,13 @@ public class DashboardController {
             @Override
             public void handle(ActionEvent actionEvent) {
                 new ViewOrEditTransactionCategoryDialog(DashboardController.this).showAndWait();
+            }
+        });
+
+        dashboardView.getLogOutMenuItem().setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                new LoginView().show();
             }
         });
     }

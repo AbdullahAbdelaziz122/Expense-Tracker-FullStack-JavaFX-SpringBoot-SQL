@@ -18,7 +18,7 @@ public class DashboardView {
     private Label currentBalanceLabel, currentBalance;
     private Label totalIncomeLabel, totalIncome;
     private Label totalExpenseLabel, totalExpense;
-    private MenuItem createNewCategoryMenuItem, viewCategoriesMenuItem;
+    private MenuItem createNewCategoryMenuItem, viewCategoriesMenuItem, logOutMenuItem;
 
     private Button addTransactionButton;
     private VBox recentTransactionVBox;
@@ -161,7 +161,8 @@ public class DashboardView {
 
         createNewCategoryMenuItem = new MenuItem("Create Category");
         viewCategoriesMenuItem = new MenuItem("View Categories");
-        fileMenu.getItems().addAll(createNewCategoryMenuItem, viewCategoriesMenuItem);
+        logOutMenuItem = new MenuItem("Logout");
+        fileMenu.getItems().addAll(createNewCategoryMenuItem, viewCategoriesMenuItem, logOutMenuItem);
         menuBar.getMenus().addAll(fileMenu);
         return menuBar;
     }
@@ -217,5 +218,13 @@ public class DashboardView {
 
     public LoadingAnimationPane getLoadingAnimationPane() {
         return loadingAnimationPane;
+    }
+
+    public MenuItem getLogOutMenuItem() {
+        return logOutMenuItem;
+    }
+
+    public void setLogOutMenuItem(MenuItem logOutMenuItem) {
+        this.logOutMenuItem = logOutMenuItem;
     }
 }

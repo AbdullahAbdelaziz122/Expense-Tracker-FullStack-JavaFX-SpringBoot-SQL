@@ -12,7 +12,7 @@ import org.example.utils.Utility;
 import org.example.utils.ViewNavigator;
 
 public class SignUpView {
-    private Label expenseTrackerLabel = new Label("Expense Tracker");
+    private Label expenseTrackerLabel = new Label("Smart Spend");
     private TextField usernameField = new TextField();
     private TextField emailFiled = new TextField();
     private PasswordField passwordField = new PasswordField();

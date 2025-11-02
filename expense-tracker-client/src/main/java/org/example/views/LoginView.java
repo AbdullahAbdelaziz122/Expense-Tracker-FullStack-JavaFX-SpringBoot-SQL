@@ -13,7 +13,7 @@ import org.example.utils.Utility;
 import org.example.utils.ViewNavigator;
 
 public class LoginView {
-    private Label expenseTrackerLabel = new Label("Expense Tracker");
+    private Label expenseTrackerLabel = new Label("Smart Spend");
     private TextField usernameField = new TextField();
     private PasswordField passwordField = new PasswordField();
     private Button loginButton = new Button("Login");
