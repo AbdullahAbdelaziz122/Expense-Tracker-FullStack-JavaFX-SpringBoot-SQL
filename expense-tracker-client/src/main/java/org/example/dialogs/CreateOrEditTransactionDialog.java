@@ -148,15 +148,18 @@ public class CreateOrEditTransactionDialog extends CustomDialog{
                     Long categoryId = findCategoryByName( transactionCategoryList, categoryName);
 
                     System.out.println("Ready for post");
+
                     if(!isEditing) {
                         if (SqlUtil.postTransaction(user.getId(), categoryId, name, amount, date, type)) {
                             Utility.showAlertDialog(Alert.AlertType.INFORMATION, "Transaction created Successfully");
+                            dashboardController.refreshDashboardData();
                             return;
                         }
                     }else{
 
                         if(SqlUtil.putTransaction(transactionComponent.getTransaction().getId(), name, amount, type, date, categoryId)){
                             Utility.showAlertDialog(Alert.AlertType.INFORMATION, "Transaction Updated Successfully");
+                            dashboardController.refreshDashboardData();
                             return;
                         }
                     }

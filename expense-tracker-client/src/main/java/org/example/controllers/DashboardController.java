@@ -80,4 +80,23 @@ public class DashboardController {
     public User getUser() {
         return user;
     }
+
+
+
+
+    public void refreshDashboardData(){
+        List<Transaction> transactionsList = SqlUtil.getRecentTransactions(user.getId(), 0, 10);
+
+        dashboardView.getRecentTransactionVBox().getChildren().clear();
+
+        if (transactionsList.isEmpty()) return;
+
+        for (Transaction transaction : transactionsList){
+            dashboardView.getRecentTransactionVBox().getChildren().add(
+                    new TransactionComponent(this, transaction)
+            );
+        }
+
+        // refresh the Balance Summary box
+    }
 }
