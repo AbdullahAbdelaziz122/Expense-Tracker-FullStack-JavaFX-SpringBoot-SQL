@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,24 @@ public class TransactionService {
                 .map(transaction -> (transactionToResponseMapper(transaction))
                 ).toList();
         return new UserTransactionResponse(userResponse, transactionResponses);
+    }
+
+    public UserTransactionResponse getTransactionByUserIdAndYear(Long userId, int year){
+
+        // validate user
+        User user = userService.getUserById(userId);
+        UserResponse userResponse = new UserResponse(user.getId(), user.getName(), user.getEmail());
+
+        LocalDate startDate = LocalDate.of(year, 1, 1);
+        LocalDate endDate = LocalDate.of(year, 12, 31);
+
+        List<Transaction> transactionList = transactionRepository
+                .findAllByUserIdAndDateBetweenOrderByDateDesc(userId, startDate, endDate);
+        List<TransactionResponse> transactionResponses = transactionList.stream()
+                .map(transaction -> (transactionToResponseMapper(transaction))
+                ).toList();
+        return new UserTransactionResponse(userResponse, transactionResponses);
+
     }
 
 

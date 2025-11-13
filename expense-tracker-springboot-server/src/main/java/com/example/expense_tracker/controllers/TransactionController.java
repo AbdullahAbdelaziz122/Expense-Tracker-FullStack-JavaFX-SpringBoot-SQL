@@ -35,6 +35,26 @@ public class TransactionController {
         ));
     }
 
+
+    @GetMapping("/summary/{user_id}")
+    public ResponseEntity<?> getTransactionByUserIdAndYear(@PathVariable Long user_id, @RequestParam (required = true) int year){
+
+        UserTransactionResponse response = transactionService.getTransactionByUserIdAndYear(user_id, year);
+
+        if(response.getTransactions().isEmpty()){
+            return ResponseEntity.ok().body(new ApiResponse<>(
+                    true,
+                    "No transactions found for user: "+ user_id,
+                    null
+            ));
+        }
+        return ResponseEntity.ok().body(new ApiResponse<>(
+                true,
+                "Transactions found for user: "+ user_id,
+                response
+        ));
+    }
+
     @GetMapping("/recent/user/{user_id}")
     public ResponseEntity<?> getRecentTransactions(
             @PathVariable Long user_id,
