@@ -5,13 +5,16 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import org.example.animations.LoadingAnimationPane;
 import org.example.controllers.DashboardController;
+import org.example.models.MonthlyFinance;
 import org.example.models.User;
 import org.example.utils.Utility;
 import org.example.utils.ViewNavigator;
 
+import java.math.BigDecimal;
 import java.time.Year;
 
 public class DashboardView {
@@ -28,6 +31,13 @@ public class DashboardView {
 
     // Transaction summary
     private ComboBox<Integer> yearComboBox;
+
+
+    // Table view
+    TableView<MonthlyFinance> transactionTable;
+    TableColumn<MonthlyFinance, String> monthColumn;
+    TableColumn<MonthlyFinance, BigDecimal> incomeColumn;
+    TableColumn<MonthlyFinance, BigDecimal> expenseColumn;
 
     private LoadingAnimationPane loadingAnimationPane;
 
@@ -110,8 +120,8 @@ public class DashboardView {
         // transaction table summary
         VBox transactionSummaryVbox = new VBox(20);
         HBox yearComboBoxAndChartButtonHBox= createYearComboBoxAndChartButtonHBox();
-
-        transactionSummaryVbox.getChildren().addAll(yearComboBoxAndChartButtonHBox);
+        VBox transactionTableSummary = createTransactionTableSummary();
+        transactionSummaryVbox.getChildren().addAll(yearComboBoxAndChartButtonHBox, transactionTableSummary );
 
         // recent transaction
         VBox recentTransactionsVBox = createRecentTransactionsVBox();
@@ -123,6 +133,22 @@ public class DashboardView {
         return gridPane;
     }
 
+    private VBox createTransactionTableSummary(){
+        VBox vBox = new VBox();
+        transactionTable = new TableView<>();
+        monthColumn = new TableColumn<>("Month");
+        monthColumn.setCellValueFactory(new PropertyValueFactory<>("month"));
+
+        incomeColumn = new TableColumn<>("Income");
+        incomeColumn.setCellValueFactory(new PropertyValueFactory<>("income"));
+
+        expenseColumn = new TableColumn<>("Expense");
+        expenseColumn.setCellValueFactory(new PropertyValueFactory<>("expense"));
+
+        transactionTable.getColumns().addAll(monthColumn, incomeColumn, expenseColumn);
+        vBox.getChildren().addAll(transactionTable);
+        return vBox;
+    }
     private HBox createYearComboBoxAndChartButtonHBox(){
         HBox hbox = new HBox();
         yearComboBox = new ComboBox<Integer>();
