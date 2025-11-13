@@ -282,4 +282,24 @@ public class DashboardView {
     public void setLogOutMenuItem(MenuItem logOutMenuItem) {
         this.logOutMenuItem = logOutMenuItem;
     }
+
+    public TableView<MonthlyFinance> getTransactionTable() {
+        return transactionTable;
+    }
+
+    public TableColumn<MonthlyFinance, String> getMonthColumn() {
+        return monthColumn;
+    }
+
+    public TableColumn<MonthlyFinance, BigDecimal> getIncomeColumn() {
+        return incomeColumn;
+    }
+
+    public TableColumn<MonthlyFinance, BigDecimal> getExpenseColumn() {
+        return expenseColumn;
+    }
+
+    public ComboBox<Integer> getYearComboBox() {
+        return yearComboBox;
+    }
 }

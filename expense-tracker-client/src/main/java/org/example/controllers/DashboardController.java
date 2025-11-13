@@ -1,10 +1,12 @@
 package org.example.controllers;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import org.example.components.TransactionComponent;
 import org.example.dialogs.CreateOrEditTransactionDialog;
+import org.example.models.MonthlyFinance;
 import org.example.models.Transaction;
 import org.example.models.User;
 import org.example.dialogs.CreateNewTransactionCategoryDialog;
@@ -21,13 +23,22 @@ public class DashboardController {
     // recent transactions section
     private final int recentTransactionSize = 5;
     private int currentPage;
+    List<Transaction> transactionsList, currentTransactionsByYear;
 
+    private int currentYear;
 
     public DashboardController(DashboardView dashboardView, User user){
         this.dashboardView = dashboardView;
+        this.currentYear = dashboardView.getYearComboBox().getValue();
         this.user = user;
         initialize();
         fetchUserData();
+    }
+
+
+    // todo: finish this
+    private ObservableList<MonthlyFinance> calculateMonthlyFinances(){
+        return null;
     }
 
     private void initialize(){
@@ -41,7 +52,13 @@ public class DashboardController {
         // load the Loading Animations
         dashboardView.getLoadingAnimationPane().setVisible(true);
 
+        // Get recentTransactions
         createRecentTransactionComponents();
+
+
+        // Get the transactions by the year
+        currentTransactionsByYear = SqlUtil.getUserTransactionsByYear(user.getId(), currentYear);
+
 
         new Thread(new Runnable() {
             @Override
@@ -91,7 +108,7 @@ public class DashboardController {
     }
 
     private void createRecentTransactionComponents(){
-        List<Transaction> transactionsList = SqlUtil.getRecentTransactions(user.getId(), 0, 10);
+        transactionsList = SqlUtil.getRecentTransactions(user.getId(), 0, 10);
 
         if (transactionsList.isEmpty()) return;
 

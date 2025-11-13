@@ -133,6 +133,8 @@ public class SqlUtil {
         }
     }
 
+
+    // Get Transactions categories
     public static List<TransactionCategory> getAllTransactionCategoriesByUser(Long userId) {
         List<TransactionCategory> transactionCategories = new ArrayList<>();
 
@@ -200,6 +202,7 @@ public class SqlUtil {
     }
 
 
+    // update transactions categories
     public static boolean putTransactionCategory(Long categoryId, String newCategoryName, String newCategoryColor) {
 
         JsonObject request = new JsonObject();
@@ -264,8 +267,10 @@ public class SqlUtil {
         }
     }
 
-    // Transactions
 
+    // Transactions APIs
+
+    // Post Transactions
     public static boolean postTransaction(Long userId, Long categoryId, String name, Double amount, LocalDate date, String type){
         try {
             // create Request body
@@ -295,7 +300,7 @@ public class SqlUtil {
         }
     }
 
-
+    // update transaction
     public static boolean putTransaction(Long transactionId, String transactionName, Double transactionAmount, String transactionType,
                                          LocalDate date, Long categoryId){
         try {
@@ -331,7 +336,7 @@ public class SqlUtil {
         }
     }
 
-
+    // Get transactions
     public static List<Transaction> getUserTransactions(int userId){
 
         try {
@@ -340,41 +345,7 @@ public class SqlUtil {
                     ApiUtil.RequestMethod.GET,
                     null
             );
-            var transactions = new ArrayList<Transaction>();
-
-            if (response.has("status") && response.get("status").getAsInt() != 200){
-                String error = response.get("error").toString();
-                System.out.println("Failed: "+ error);
-                Utility.showAlertDialog(Alert.AlertType.ERROR, "Something went wrong:\n"+error);
-                return transactions;
-            }
-
-            System.out.println("Success: " + response.get("message").toString());
-
-            // Extract "data"
-            if (!response.has("data") || response.get("data").isJsonNull()) {
-                System.out.println("No 'data' field found in response.");
-                return transactions;
-            }
-
-            JsonObject data = response.get("data").getAsJsonObject();
-
-            if(data.isJsonNull()){
-                System.out.println("User doesn't have transactions");
-                return transactions;
-            }
-
-            JsonArray transactionsList = data.get("transactions").getAsJsonArray();
-
-            if(transactionsList.isEmpty()){
-                System.out.println("User doesn't have transactions");
-                return transactions;
-            }
-
-            // parse the transactions
-            parseTransactionsList(transactions, transactionsList);
-            System.out.println("Fetched " + transactions.size() + " categories.");
-            return transactions;
+            return handleTransactionResponse(response);
 
         }catch (IOException ex){
             ex.printStackTrace();
@@ -385,6 +356,65 @@ public class SqlUtil {
 
     }
 
+    public static List<Transaction> getUserTransactionsByYear(Long userId, int year){
+
+        try {
+
+            JsonObject response = ApiUtil.fetchApi(
+                    "/api/v1/transaction/summary/"+ userId + "?year="+year,
+                    ApiUtil.RequestMethod.GET,
+                    null
+            );
+            return handleTransactionResponse(response);
+        }catch (IOException ex){
+            ex.printStackTrace();
+            System.out.println("⚠️ Network or connection error: " + ex.getMessage());
+            Utility.showAlertDialog(Alert.AlertType.ERROR, "ConnectionError\nCheck connection and refresh");
+            return new ArrayList<Transaction>();
+        }
+    }
+
+
+    private static List<Transaction> handleTransactionResponse(JsonObject response){
+        /*
+        * Helper method to handle the response of List of transaction and parse it.
+        * */
+        var transactions = new ArrayList<Transaction>();
+
+        if (response.has("status") && response.get("status").getAsInt() != 200){
+            String error = response.get("error").toString();
+            System.out.println("Failed: "+ error);
+            Utility.showAlertDialog(Alert.AlertType.ERROR, "Something went wrong:\n"+error);
+            return transactions;
+        }
+
+        System.out.println("Success: " + response.get("message").toString());
+
+        // Extract "data"
+        if (!response.has("data") || response.get("data").isJsonNull()) {
+            System.out.println("No 'data' field found in response.");
+            return transactions;
+        }
+
+        JsonObject data = response.get("data").getAsJsonObject();
+
+        if(data.isJsonNull()){
+            System.out.println("User doesn't have transactions");
+            return transactions;
+        }
+
+        JsonArray transactionsList = data.get("transactions").getAsJsonArray();
+
+        if(transactionsList.isEmpty()){
+            System.out.println("User doesn't have transactions");
+            return transactions;
+        }
+
+        // parse the transactions
+        parseTransactionsList(transactions, transactionsList);
+        System.out.println("Fetched " + transactions.size() + " categories.");
+        return transactions;
+    }
 
     public static List<Transaction> getRecentTransactions(Long userId, int page, int size){
         try {
