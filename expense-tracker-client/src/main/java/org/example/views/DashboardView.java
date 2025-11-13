@@ -121,6 +121,7 @@ public class DashboardView {
         VBox transactionSummaryVbox = new VBox(20);
         HBox yearComboBoxAndChartButtonHBox= createYearComboBoxAndChartButtonHBox();
         VBox transactionTableSummary = createTransactionTableSummary();
+        VBox.setVgrow(transactionTableSummary, Priority.ALWAYS);
         transactionSummaryVbox.getChildren().addAll(yearComboBoxAndChartButtonHBox, transactionTableSummary );
 
         // recent transaction
@@ -136,14 +137,18 @@ public class DashboardView {
     private VBox createTransactionTableSummary(){
         VBox vBox = new VBox();
         transactionTable = new TableView<>();
+        VBox.setVgrow(transactionTable, Priority.ALWAYS);
         monthColumn = new TableColumn<>("Month");
         monthColumn.setCellValueFactory(new PropertyValueFactory<>("month"));
+        monthColumn.getStyleClass().addAll("main-background", "text-size-md", "text-light-gray");
 
         incomeColumn = new TableColumn<>("Income");
         incomeColumn.setCellValueFactory(new PropertyValueFactory<>("income"));
+        incomeColumn.getStyleClass().addAll("main-background", "text-size-md", "text-light-gray");
 
         expenseColumn = new TableColumn<>("Expense");
         expenseColumn.setCellValueFactory(new PropertyValueFactory<>("expense"));
+        expenseColumn.getStyleClass().addAll("main-background", "text-size-md", "text-light-gray");
 
         transactionTable.getColumns().addAll(monthColumn, incomeColumn, expenseColumn);
         vBox.getChildren().addAll(transactionTable);

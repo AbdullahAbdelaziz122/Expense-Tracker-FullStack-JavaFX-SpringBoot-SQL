@@ -41,6 +41,15 @@ ScrollPane > .viewport{
     -fx-background-color: transparent;
 }
 
+
+/* Table */
+.table-view .column-header{
+    -fx-background-color: #515050;
+}
+.table-view .column-header .label{
+    -fx-text-fill: #ffff;
+}
+
 /* text */
 
 /*.text-size-lg{*/
