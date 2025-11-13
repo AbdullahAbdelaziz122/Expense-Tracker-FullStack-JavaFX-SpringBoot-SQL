@@ -12,6 +12,8 @@ import org.example.models.User;
 import org.example.utils.Utility;
 import org.example.utils.ViewNavigator;
 
+import java.time.Year;
+
 public class DashboardView {
     private User user;
 
@@ -20,9 +22,12 @@ public class DashboardView {
     private Label totalExpenseLabel, totalExpense;
     private MenuItem createNewCategoryMenuItem, viewCategoriesMenuItem, logOutMenuItem;
 
-    private Button addTransactionButton;
+    private Button addTransactionButton, viewChartButton;
     private VBox recentTransactionVBox;
     private ScrollPane recentTransactionScrollPane;
+
+    // Transaction summary
+    private ComboBox<Integer> yearComboBox;
 
     private LoadingAnimationPane loadingAnimationPane;
 
@@ -102,14 +107,33 @@ public class DashboardView {
         columnConstraints.setPercentWidth(50);
         gridPane.getColumnConstraints().addAll(columnConstraints, columnConstraints);
 
+        // transaction table summary
+        VBox transactionSummaryVbox = new VBox(20);
+        HBox yearComboBoxAndChartButtonHBox= createYearComboBoxAndChartButtonHBox();
 
+        transactionSummaryVbox.getChildren().addAll(yearComboBoxAndChartButtonHBox);
 
         // recent transaction
         VBox recentTransactionsVBox = createRecentTransactionsVBox();
         recentTransactionsVBox.getStyleClass().addAll("field-background", "rounded-border", "padding-10px");
         GridPane.setVgrow(recentTransactionsVBox, Priority.ALWAYS);
+
+        gridPane.add(transactionSummaryVbox, 0, 0);
         gridPane.add(recentTransactionsVBox, 1, 0);
         return gridPane;
+    }
+
+    private HBox createYearComboBoxAndChartButtonHBox(){
+        HBox hbox = new HBox();
+        yearComboBox = new ComboBox<Integer>();
+        yearComboBox.getStyleClass().addAll("text-size-md");
+        yearComboBox.setValue(Year.now().getValue());
+
+        viewChartButton = new Button("view chart");
+        viewChartButton.getStyleClass().addAll("field-background", "text-size-md", "text-light-gray");
+
+        hbox.getChildren().addAll(yearComboBox, viewChartButton);
+        return hbox;
     }
 
     private VBox createRecentTransactionsVBox() {
