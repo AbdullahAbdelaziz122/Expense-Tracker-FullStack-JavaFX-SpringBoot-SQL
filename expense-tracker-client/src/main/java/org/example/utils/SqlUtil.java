@@ -434,7 +434,7 @@ public class SqlUtil {
 
     }
 
-    private static void parseTransactionsList(ArrayList<Transaction> transactions, JsonArray content) {
+    private static ArrayList<Transaction> parseTransactionsList(ArrayList<Transaction> transactions, JsonArray content) {
         for(JsonElement transaction: content){
             JsonObject transactionObj = transaction.getAsJsonObject();
             Long id = transactionObj.get("id").getAsLong();
@@ -457,6 +457,7 @@ public class SqlUtil {
             // Create Transaction object
             transactions.add(new Transaction(id, name, amount, type, date, category));
         }
+        return transactions;
     }
 
     public static boolean deleteTransaction(Long transactionId){
