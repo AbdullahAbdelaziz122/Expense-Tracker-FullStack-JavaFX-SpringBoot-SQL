@@ -1,6 +1,7 @@
 package org.example.views;
 
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
@@ -82,9 +83,23 @@ public class DashboardView {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 loadingAnimationPane.resizeHeight((double) t1);
+                resizeTableWidthColumns();
             }
         });
     }
+
+    private void resizeTableWidthColumns(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                double colsWidth = transactionTable.getWidth() * (0.3);
+                monthColumn.setPrefWidth(colsWidth);
+                incomeColumn.setPrefWidth(colsWidth);
+                expenseColumn.setPrefWidth(transactionTable.getWidth() - monthColumn.getWidth() - incomeColumn.getWidth());
+            }
+        });
+    }
+
 
     private Scene createScene(){
         MenuBar menuBar = createMenuBar();
@@ -152,6 +167,7 @@ public class DashboardView {
 
         transactionTable.getColumns().addAll(monthColumn, incomeColumn, expenseColumn);
         vBox.getChildren().addAll(transactionTable);
+        resizeTableWidthColumns();
         return vBox;
     }
     private HBox createYearComboBoxAndChartButtonHBox(){
