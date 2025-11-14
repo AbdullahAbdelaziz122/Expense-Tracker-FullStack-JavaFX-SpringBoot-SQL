@@ -12,11 +12,13 @@ import org.example.animations.LoadingAnimationPane;
 import org.example.controllers.DashboardController;
 import org.example.models.MonthlyFinance;
 import org.example.models.User;
+import org.example.utils.SqlUtil;
 import org.example.utils.Utility;
 import org.example.utils.ViewNavigator;
 
 import java.math.BigDecimal;
 import java.time.Year;
+import java.util.List;
 
 public class DashboardView {
     private User user;
@@ -174,7 +176,17 @@ public class DashboardView {
         HBox hbox = new HBox();
         yearComboBox = new ComboBox<Integer>();
         yearComboBox.getStyleClass().addAll("text-size-md");
-        yearComboBox.setValue(Year.now().getValue());
+
+        // setting the comboBox with user Transaction years
+        List<Integer> years = SqlUtil.getTransactionYears(user.getId());
+
+        if (years.isEmpty()) {
+            yearComboBox.setValue(Year.now().getValue());
+        }else {
+            yearComboBox.getItems().setAll(years);
+            yearComboBox.setValue(years.get(0));
+        }
+
 
         viewChartButton = new Button("view chart");
         viewChartButton.getStyleClass().addAll("field-background", "text-size-md", "text-light-gray");

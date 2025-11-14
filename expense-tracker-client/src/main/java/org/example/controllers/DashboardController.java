@@ -38,7 +38,10 @@ public class DashboardController {
         this.user = user;
         initialize();
         fetchUserData();
+
     }
+
+
 
 
     private ObservableList<MonthlyFinance> calculateMonthlyFinances(){
@@ -71,7 +74,7 @@ public class DashboardController {
 
         addMenuActions();
         addRecentTransactionAction();
-
+        addComboBoxActions();
     }
 
     private void fetchUserData(){
@@ -150,10 +153,26 @@ public class DashboardController {
 
 
 
+    public void addComboBoxActions(){
+        dashboardView.getYearComboBox().setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                currentYear = dashboardView.getYearComboBox().getValue();
+
+                // refresh
+                refreshDashboardData();
+            }
+        });
+    }
+
 
     public void refreshDashboardData(){
+
+        dashboardView.getLoadingAnimationPane().setVisible(true);
+
         // Refresh in-memory lists
         transactionsList.setAll(SqlUtil.getRecentTransactions(user.getId(), 0, 10));
+        dashboardView.getYearComboBox().getItems().setAll(SqlUtil.getTransactionYears(user.getId()));
         currentTransactionsByYear.setAll(SqlUtil.getUserTransactionsByYear(user.getId(), currentYear));
 
         // Refresh Recent Transactions UI
@@ -164,9 +183,21 @@ public class DashboardController {
                     new TransactionComponent(this, transaction)
             );
         }
-
         // Refresh monthly finances table
         dashboardView.getTransactionTable().setItems(calculateMonthlyFinances());
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                    dashboardView.getLoadingAnimationPane().setVisible(false);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
+
 
 }

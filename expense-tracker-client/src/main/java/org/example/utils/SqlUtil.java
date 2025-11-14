@@ -374,7 +374,6 @@ public class SqlUtil {
         }
     }
 
-
     private static List<Transaction> handleTransactionResponse(JsonObject response){
         /*
         * Helper method to handle the response of List of transaction and parse it.
@@ -414,6 +413,51 @@ public class SqlUtil {
         parseTransactionsList(transactions, transactionsList);
         System.out.println("Fetched " + transactions.size() + " categories.");
         return transactions;
+    }
+
+
+    public  static List<Integer> getTransactionYears(Long userId){
+        try {
+            JsonObject response = ApiUtil.fetchApi(
+                    "/api/v1/transaction/years/"+userId,
+                    ApiUtil.RequestMethod.GET,
+                    null
+            );
+            List<Integer> years = new ArrayList<>();
+            if (response.has("status") && response.get("status").getAsInt() != 200){
+                String error = response.get("error").toString();
+                System.out.println("Failed: "+ error);
+                Utility.showAlertDialog(Alert.AlertType.ERROR, "Something went wrong:\n"+error);
+                return years;
+            }
+
+            System.out.println("Success: " + response.get("message").toString());
+
+            // Extract "data"
+            if (!response.has("data") || response.get("data").isJsonNull()) {
+                System.out.println("No 'data' field found in response.");
+                return years;
+            }
+
+            JsonArray data = response.get("data").getAsJsonArray();
+
+            if(data.isEmpty()){
+                System.out.println("User doesn't have transactions");
+                return years;
+            }
+
+            for (JsonElement element : data){
+                years.add(element.getAsInt());
+            }
+
+            return years;
+
+        }catch (IOException ex){
+            ex.printStackTrace();
+            System.out.println("⚠️ Network or connection error: " + ex.getMessage());
+            Utility.showAlertDialog(Alert.AlertType.ERROR, "ConnectionError\nCheck connection and refresh");
+            return new ArrayList<Integer>();
+        }
     }
 
     public static List<Transaction> getRecentTransactions(Long userId, int page, int size){
