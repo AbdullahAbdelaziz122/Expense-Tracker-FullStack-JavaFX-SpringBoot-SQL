@@ -1,5 +1,6 @@
 package com.example.expense_tracker.services;
 
+import com.example.expense_tracker.config.BCryptConfig;
 import com.example.expense_tracker.exceptions.EmailAlreadyExist;
 import com.example.expense_tracker.exceptions.UserNotAuthorizedException;
 import com.example.expense_tracker.exceptions.UserNotFoundException;
@@ -14,12 +15,16 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
     private static final Logger logger = Logger.getLogger(UserService.class.getName());
 
     private final UserRepository userRepository;
+    private final BCryptConfig bCryptConfig;
 
+    public UserService(UserRepository userRepository, BCryptConfig bCryptConfig) {
+        this.userRepository = userRepository;
+        this.bCryptConfig = bCryptConfig;
+    }
 
     // todo : return user response instead of actual user
     public User getUserById(Long userId) {
@@ -44,7 +49,7 @@ public class UserService {
 
             User user = getUserByEmail(email);
 
-            if (!password.equals(user.getPassword())) {
+            if (!bCryptConfig.verifyPassword(password, user.getPassword())) {
                 logger.warning("Invalid login attempt for email: " + email);
                 throw new UserNotAuthorizedException();
             }
@@ -66,8 +71,10 @@ public class UserService {
         User user = new User();
         user.setName(name);
         user.setEmail(email);
-        //todo : Hash the password before saving it to the database
-        user.setPassword(password);
+
+        // hash password
+        String hashedPass = bCryptConfig.hash(password);
+        user.setPassword(hashedPass);
         user.setCreatedAt(LocalDate.now());
 
         User savedUser = userRepository.save(user);
