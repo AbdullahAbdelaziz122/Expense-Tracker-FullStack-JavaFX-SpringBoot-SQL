@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/transaction")
@@ -68,7 +70,23 @@ public class TransactionController {
                 response
         ));
     }
+    @GetMapping("/years/{user_id}")
+    public ResponseEntity<?> getTransactionsYears(@PathVariable Long user_id){
+        List<Integer> years = transactionService.getTransactionYears(user_id);
 
+        if(years.isEmpty()){
+            return ResponseEntity.ok().body(new ApiResponse<>(
+                    true,
+                    "User has no transactions",
+                    null
+            ));
+        }
+        return ResponseEntity.ok().body(new ApiResponse<>(
+                true,
+                "Transactions years found for user",
+                years
+        ));
+    }
     //post
     @PostMapping
     public ResponseEntity<?> postTransaction(@RequestBody TransactionRequest request){

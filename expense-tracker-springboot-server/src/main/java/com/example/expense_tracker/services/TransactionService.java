@@ -9,16 +9,12 @@ import com.example.expense_tracker.models.User;
 import com.example.expense_tracker.repositories.TransactionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class TransactionService {
@@ -90,6 +86,12 @@ public class TransactionService {
                 transactionsPage.isLast()
         );
 
+    }
+
+    public List<Integer> getTransactionYears(Long userId) {
+        // validate user
+        userService.getUserById(userId);
+        return transactionRepository.findDistinctYearsByUserId(userId);
     }
 
     // post
