@@ -93,9 +93,9 @@ public class DashboardView {
             @Override
             public void run() {
                 double colsWidth = transactionTable.getWidth() * (0.3);
-                monthColumn.setPrefWidth(colsWidth);
+                expenseColumn.setPrefWidth(colsWidth);
                 incomeColumn.setPrefWidth(colsWidth);
-                expenseColumn.setPrefWidth(transactionTable.getWidth() - monthColumn.getWidth() - incomeColumn.getWidth());
+                monthColumn.setPrefWidth(transactionTable.getWidth() - expenseColumn.getWidth() - incomeColumn.getWidth());
             }
         });
     }
@@ -126,7 +126,7 @@ public class DashboardView {
 
     private GridPane createGridPane() {
         GridPane gridPane = new GridPane();
-
+        gridPane.setHgap(15);
         //set constraints to the cell of grid pane
         ColumnConstraints columnConstraints = new ColumnConstraints();
         columnConstraints.setPercentWidth(50);
