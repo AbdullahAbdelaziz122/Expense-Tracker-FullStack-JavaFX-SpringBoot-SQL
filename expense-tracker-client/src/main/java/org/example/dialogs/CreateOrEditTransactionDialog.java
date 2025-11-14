@@ -153,6 +153,7 @@ public class CreateOrEditTransactionDialog extends CustomDialog{
                         if (SqlUtil.postTransaction(user.getId(), categoryId, name, amount, date, type)) {
                             Utility.showAlertDialog(Alert.AlertType.INFORMATION, "Transaction created Successfully");
                             dashboardController.refreshDashboardData();
+                            dashboardController.refreshDashboardData();
                             return;
                         }
                     }else{

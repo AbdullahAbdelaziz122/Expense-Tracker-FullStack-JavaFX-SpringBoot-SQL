@@ -97,7 +97,7 @@ public class TransactionComponent extends HBox {
                 alert.showAndWait().ifPresent(response -> {
                     if (response == ButtonType.YES) {
                         SqlUtil.deleteTransaction(transaction.getId());
-
+                        dashboardController.refreshDashboardData();
                         // Remove from parent VBox after deletion
                         if (getParent() instanceof VBox parentVBox) {
                             parentVBox.getChildren().remove(TransactionComponent.this);

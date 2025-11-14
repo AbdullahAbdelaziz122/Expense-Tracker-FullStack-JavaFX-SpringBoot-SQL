@@ -1,5 +1,6 @@
 package org.example.controllers;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,6 +16,8 @@ import org.example.utils.SqlUtil;
 import org.example.views.DashboardView;
 import org.example.views.LoginView;
 
+import java.math.BigDecimal;
+import java.time.Month;
 import java.util.List;
 
 public class DashboardController {
@@ -23,7 +26,9 @@ public class DashboardController {
     // recent transactions section
     private final int recentTransactionSize = 5;
     private int currentPage;
-    List<Transaction> transactionsList, currentTransactionsByYear;
+    private ObservableList<Transaction> transactionsList = FXCollections.observableArrayList();
+    private ObservableList<Transaction> currentTransactionsByYear = FXCollections.observableArrayList();
+
 
     private int currentYear;
 
@@ -36,9 +41,30 @@ public class DashboardController {
     }
 
 
-    // todo: finish this
     private ObservableList<MonthlyFinance> calculateMonthlyFinances(){
-        return null;
+        double[] incomeCounter = new double[12];
+        double[] expenseCounter = new double[12];
+
+        for (Transaction transaction : currentTransactionsByYear){
+
+            if(transaction.getType().equalsIgnoreCase("Income")){
+                incomeCounter[transaction.getDate().getMonth().getValue() - 1] += transaction.getAmount();
+            }else {
+                expenseCounter[transaction.getDate().getMonth().getValue() - 1] += transaction.getAmount();
+            }
+        }
+
+        ObservableList<MonthlyFinance> monthlyFinances = FXCollections.observableArrayList();
+        for (int i = 0; i < 12; i++) {
+            MonthlyFinance monthlyFinance = new MonthlyFinance(
+                    Month.of(i+ 1).name(),
+                    new BigDecimal(String.valueOf(incomeCounter[i])),
+                    new BigDecimal(String.valueOf(expenseCounter[i]))
+            );
+
+            monthlyFinances.add(monthlyFinance);
+        }
+        return monthlyFinances;
     }
 
     private void initialize(){
@@ -52,13 +78,12 @@ public class DashboardController {
         // load the Loading Animations
         dashboardView.getLoadingAnimationPane().setVisible(true);
 
+        // Get the transactions by the year
+        currentTransactionsByYear.setAll(SqlUtil.getUserTransactionsByYear(user.getId(), currentYear));
+
+        dashboardView.getTransactionTable().setItems(calculateMonthlyFinances());
         // Get recentTransactions
         createRecentTransactionComponents();
-
-
-        // Get the transactions by the year
-        currentTransactionsByYear = SqlUtil.getUserTransactionsByYear(user.getId(), currentYear);
-
 
         new Thread(new Runnable() {
             @Override
@@ -108,7 +133,7 @@ public class DashboardController {
     }
 
     private void createRecentTransactionComponents(){
-        transactionsList = SqlUtil.getRecentTransactions(user.getId(), 0, 10);
+        transactionsList.setAll(SqlUtil.getRecentTransactions(user.getId(), 0, 10));
 
         if (transactionsList.isEmpty()) return;
 
@@ -127,18 +152,21 @@ public class DashboardController {
 
 
     public void refreshDashboardData(){
-        List<Transaction> transactionsList = SqlUtil.getRecentTransactions(user.getId(), 0, 10);
+        // Refresh in-memory lists
+        transactionsList.setAll(SqlUtil.getRecentTransactions(user.getId(), 0, 10));
+        currentTransactionsByYear.setAll(SqlUtil.getUserTransactionsByYear(user.getId(), currentYear));
 
+        // Refresh Recent Transactions UI
         dashboardView.getRecentTransactionVBox().getChildren().clear();
 
-        if (transactionsList.isEmpty()) return;
-
-        for (Transaction transaction : transactionsList){
+        for (Transaction transaction : transactionsList) {
             dashboardView.getRecentTransactionVBox().getChildren().add(
                     new TransactionComponent(this, transaction)
             );
         }
 
-        // refresh the Balance Summary box
+        // Refresh monthly finances table
+        dashboardView.getTransactionTable().setItems(calculateMonthlyFinances());
     }
+
 }
