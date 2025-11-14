@@ -56,6 +56,18 @@ ScrollPane > .viewport{
     -fx-pref-height: 0;
 }
 
+/* bar chart */
+.axis-label{
+    -fx-text-fill: #BEB9B9;
+}
+.default-color0.chart-legend-item-symbol{
+    -fx-background-color: #13880d;
+}
+
+.default-color1.chart-legend-item-symbol{
+    -fx-background-color: #ba2f2f;
+}
+
 /* text */
 
 /*.text-size-lg{*/

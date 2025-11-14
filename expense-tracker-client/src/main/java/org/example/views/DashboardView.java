@@ -351,4 +351,8 @@ public class DashboardView {
     public void setTotalExpense(Label totalExpense) {
         this.totalExpense = totalExpense;
     }
+
+    public Button getViewChartButton() {
+        return viewChartButton;
+    }
 }

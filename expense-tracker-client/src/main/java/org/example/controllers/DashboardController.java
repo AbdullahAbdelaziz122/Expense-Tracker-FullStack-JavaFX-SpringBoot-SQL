@@ -10,13 +10,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import org.example.components.TransactionComponent;
-import org.example.dialogs.CreateOrEditTransactionDialog;
-import org.example.dialogs.ViewTransactionDialog;
+import org.example.dialogs.*;
 import org.example.models.MonthlyFinance;
 import org.example.models.Transaction;
 import org.example.models.User;
-import org.example.dialogs.CreateNewTransactionCategoryDialog;
-import org.example.dialogs.ViewOrEditTransactionCategoryDialog;
 import org.example.utils.SqlUtil;
 import org.example.views.DashboardView;
 import org.example.views.LoginView;
@@ -54,6 +51,7 @@ public class DashboardController {
         addRecentTransactionAction();
         addComboBoxActions();
         addTableActions();
+        addViewChartActions();
     }
 
 
@@ -134,6 +132,18 @@ public class DashboardController {
         return monthlyFinances;
     }
 
+    private void createRecentTransactionComponents(){
+        transactionsList.setAll(SqlUtil.getRecentTransactions(user.getId(), 0, 10));
+
+        if (transactionsList.isEmpty()) return;
+
+        for (Transaction transaction : transactionsList){
+            dashboardView.getRecentTransactionVBox().getChildren().add(
+                    new TransactionComponent(this, transaction)
+            );
+        }
+    }
+
     private void addRecentTransactionAction() {
         dashboardView.getAddTransactionButton().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -188,16 +198,13 @@ public class DashboardController {
         });
     }
 
-    private void createRecentTransactionComponents(){
-        transactionsList.setAll(SqlUtil.getRecentTransactions(user.getId(), 0, 10));
-
-        if (transactionsList.isEmpty()) return;
-
-        for (Transaction transaction : transactionsList){
-            dashboardView.getRecentTransactionVBox().getChildren().add(
-                    new TransactionComponent(this, transaction)
-            );
-        }
+    private void addViewChartActions(){
+        dashboardView.getViewChartButton().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                new ViewChartDialog(DashboardController.this, dashboardView.getTransactionTable().getItems()).showAndWait();
+            }
+        });
     }
 
 
