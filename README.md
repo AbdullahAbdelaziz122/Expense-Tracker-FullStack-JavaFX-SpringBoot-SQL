@@ -236,6 +236,9 @@ mvn clean javafx:run
 
 ## 📡 API Documentation
 
+### ApiDog documentation
+Get All Endpoints: https://l23i72f0hh.apidog.io
+
 ### User Endpoints
 
 #### Register User
