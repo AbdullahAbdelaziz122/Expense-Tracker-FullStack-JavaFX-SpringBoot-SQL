@@ -39,23 +39,34 @@ public class TransactionController {
 
 
     @GetMapping("/summary/{user_id}")
-    public ResponseEntity<?> getTransactionByUserIdAndYear(@PathVariable Long user_id, @RequestParam (required = true) int year){
+    public ResponseEntity<?> getTransactionByUserIdAndYear(
+            @PathVariable Long user_id,
+            @RequestParam Integer year,
+            @RequestParam(required = false) Integer month) {
 
-        UserTransactionResponse response = transactionService.getTransactionByUserIdAndYear(user_id, year);
+        UserTransactionResponse response;
 
-        if(response.getTransactions().isEmpty()){
+        if (month == null) {
+            response = transactionService.getTransactionByUserIdAndYear(user_id, year);
+        } else {
+            response = transactionService.getTransactionsByUserAndYearAndMonth(user_id, year, month);
+        }
+
+        if (response.getTransactions().isEmpty()) {
             return ResponseEntity.ok().body(new ApiResponse<>(
                     true,
-                    "No transactions found for user: "+ user_id,
+                    "No transactions found for user: " + user_id,
                     null
             ));
         }
+
         return ResponseEntity.ok().body(new ApiResponse<>(
                 true,
-                "Transactions found for user: "+ user_id,
+                "Transactions found for user: " + user_id,
                 response
         ));
     }
+
 
     @GetMapping("/recent/user/{user_id}")
     public ResponseEntity<?> getRecentTransactions(

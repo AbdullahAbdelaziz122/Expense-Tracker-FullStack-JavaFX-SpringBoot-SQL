@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
 
 
@@ -62,6 +63,23 @@ public class TransactionService {
                 ).toList();
         return new UserTransactionResponse(userResponse, transactionResponses);
 
+    }
+
+    public UserTransactionResponse getTransactionsByUserAndYearAndMonth(long userId, int year, int month){
+        User user = userService.getUserById(userId);
+        UserResponse userResponse = new UserResponse(user.getId(), user.getName(), user.getEmail());
+
+        YearMonth yearMonth = YearMonth.of(year, month);
+
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+
+        List<Transaction> transactionList = transactionRepository
+                .findAllByUserIdAndDateBetweenOrderByDateDesc(userId, startDate, endDate);
+        List<TransactionResponse> transactionResponses = transactionList.stream()
+                .map(transaction -> (transactionToResponseMapper(transaction))
+                ).toList();
+        return new UserTransactionResponse(userResponse, transactionResponses);
     }
 
 
