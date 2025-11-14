@@ -423,9 +423,9 @@ CREATE TABLE transactions (
 - ✅ Custom exception handling for error management
 - ✅ Email format validation
 - ✅ User-category ownership verification
+- ✅ Password Hashing Using BCrypt
 
-### Recommended Enhancements
-- 🔧 **Password Hashing** - Implement BCrypt for secure password storage (noted in TODO comments)
+### Soon Enhancements
 - 🔧 **JWT Authentication** - Add token-based authentication for API security
 - 🔧 **HTTPS/TLS** - Enable secure communication in production
 - 🔧 **Input Sanitization** - Additional XSS and SQL injection prevention
@@ -466,7 +466,6 @@ mvn verify
 - [ ] **Cloud Deployment** - AWS/Azure hosting with CI/CD pipeline
 
 ### Technical Improvements
-- [ ] Password encryption (BCrypt)
 - [ ] JWT-based authentication
 - [ ] Redis caching for performance
 - [ ] Docker containerization
