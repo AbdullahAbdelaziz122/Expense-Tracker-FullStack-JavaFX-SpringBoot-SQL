@@ -1,22 +1,30 @@
 # 💰 Smart Spend - Personal Expense Tracker
 
-[![Java](https://img.shields.io/badge/Java-17+-orange.svg)](https://www.oracle.com/java/)
+[![Java](https://img.shields.io/badge/Java-25-orange.svg)](https://www.oracle.com/java/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg)](https://spring.io/projects/spring-boot)
-[![JavaFX](https://img.shields.io/badge/JavaFX-21-blue.svg)](https://openjfx.io/)
+[![JavaFX](https://img.shields.io/badge/JavaFX-23-blue.svg)](https://openjfx.io/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A powerful, full-stack desktop application for tracking personal finances with an intuitive user interface and robust backend architecture. Built with modern Java technologies to demonstrate enterprise-level software development practices.
 
 ---
 
-<!-- ## 📸 Screenshots
+## 📸 Screenshots
 
-> - Login/Registration screens
-> - Dashboard with balance summary
-> - Transaction management interface
-> - Category management views
+### Login/Registration screens
+![Login](./assets/login.png)
+![Signup](./assets/signup.png)
 
---- -->
+### Dashboard with balance summary
+![dashboard](./assets/dashboard.png)
+
+### Transaction management interface
+![Create-Transaction](./assets/create-transaction.png)
+### Category management views
+![Create-Categories](./assets/create-category.png)
+![View-Categories](./assets/view-categories.png)
+
+---
 
 ## 🌟 Key Features
 
@@ -50,41 +58,76 @@ A powerful, full-stack desktop application for tracking personal finances with a
 ### Backend Architecture (Spring Boot)
 
 ```
+src/
 ├── controllers/          # REST API endpoints
 │   ├── UserController
 │   ├── TransactionController
 │   └── TransactionCategoryController
+│
 ├── services/            # Business logic layer
 │   ├── UserService
 │   ├── TransactionService
 │   └── TransactionCategoryService
+│
 ├── repositories/        # Data access layer (JPA)
+│
 ├── models/             # JPA entities
 │   ├── User
 │   ├── Transaction
 │   └── TransactionCategory
+│
 ├── DTO/                # Data Transfer Objects
-│   ├── ApiResponse
-│   ├── PaginatedResponse
-│   └── Request/Response objects
+│
 └── exceptions/         # Custom exception handling
+│
+└── repositories/       # repositories
+│
+└──ExpenseTrackerApplicatoin.java # main app
 ```
 
 ### Frontend Architecture (JavaFX)
 
 ```
+src/
+├── animations/
+│   └── LoadingAnimationPane
+│
+├── components/
+│   ├── CategoryComponent
+│   └── TransactionComponent
+│
+├── controllers/
+│   ├── DashboardController
+│   ├── LoginController
+│   └── SignUpController
+│
+├── dialogs/
+│   ├── CreateNewTransactionCategoryDialog
+│   ├── CreateOrEditTransactionDialog
+│   ├── CustomDialog
+│   ├── ViewChartDialog
+│   ├── ViewOrEditTransactionCategoryDialog
+│   └── ViewTransactionDialog
+│
+├── models/
+│   ├── MonthlyFinance
+│   ├── Transaction
+│   ├── TransactionCategory
+│   └── User
+│
+├── utils/
+│   ├── ApiUtil        # HTTP client for backend communication
+│   ├── SqlUtil        # Data operations wrapper
+│   ├── Utility        # contains application constants
+│   └── ViewNavigator  # Scene management
+│
 ├── views/              # JavaFX UI components
 │   ├── LoginView
 │   ├── SignUpView
 │   └── DashboardView
-├── controllers/        # View controllers (MVC pattern)
-├── models/            # Frontend data models
-├── utils/             # Utility classes
-│   ├── ApiUtil       # HTTP client for backend communication
-│   ├── SqlUtil       # Data operations wrapper
-│   └── ViewNavigator # Scene management
-└── animations/        # UI animations and effects
+└── JavaFXApplication.java
 ```
+
 
 ---
 
@@ -103,7 +146,7 @@ A powerful, full-stack desktop application for tracking personal finances with a
 ### Frontend
 | Technology | Purpose |
 |------------|---------|
-| **JavaFX 21** | Rich desktop UI framework |
+| **JavaFX 23** | Rich desktop UI framework |
 | **GSON** | JSON parsing and serialization |
 | **Apache Commons Validator** | Email and input validation |
 | **Custom CSS** | Styled UI components |
@@ -119,10 +162,10 @@ A powerful, full-stack desktop application for tracking personal finances with a
 
 Before running this application, ensure you have:
 
-- **Java Development Kit (JDK) 17 or higher**
+- **Java Development Kit (JDK) 25 or higher**
 - **Maven 3.8+**
 - **MySQL 8.0+** or **PostgreSQL 14+**
-- **IDE** (IntelliJ IDEA, Eclipse, or VS Code recommended)
+
 
 ---
 
