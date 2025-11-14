@@ -4,9 +4,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 import org.example.components.TransactionComponent;
 import org.example.dialogs.CreateOrEditTransactionDialog;
+import org.example.dialogs.ViewTransactionDialog;
 import org.example.models.MonthlyFinance;
 import org.example.models.Transaction;
 import org.example.models.User;
@@ -42,6 +46,39 @@ public class DashboardController {
     }
 
 
+    private void initialize(){
+
+        addMenuActions();
+        addRecentTransactionAction();
+        addComboBoxActions();
+        addTableActions();
+    }
+
+
+
+    private void fetchUserData(){
+        // load the Loading Animations
+        dashboardView.getLoadingAnimationPane().setVisible(true);
+
+        // Get the transactions by the year
+        currentTransactionsByYear.setAll(SqlUtil.getUserTransactionsByYear(user.getId(), currentYear));
+
+        dashboardView.getTransactionTable().setItems(calculateMonthlyFinances());
+        // Get recentTransactions
+        createRecentTransactionComponents();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                    dashboardView.getLoadingAnimationPane().setVisible(false);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
 
 
     private ObservableList<MonthlyFinance> calculateMonthlyFinances(){
@@ -68,37 +105,6 @@ public class DashboardController {
             monthlyFinances.add(monthlyFinance);
         }
         return monthlyFinances;
-    }
-
-    private void initialize(){
-
-        addMenuActions();
-        addRecentTransactionAction();
-        addComboBoxActions();
-    }
-
-    private void fetchUserData(){
-        // load the Loading Animations
-        dashboardView.getLoadingAnimationPane().setVisible(true);
-
-        // Get the transactions by the year
-        currentTransactionsByYear.setAll(SqlUtil.getUserTransactionsByYear(user.getId(), currentYear));
-
-        dashboardView.getTransactionTable().setItems(calculateMonthlyFinances());
-        // Get recentTransactions
-        createRecentTransactionComponents();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                    dashboardView.getLoadingAnimationPane().setVisible(false);
-                }catch (InterruptedException e){
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 
     private void addRecentTransactionAction() {
@@ -135,6 +141,26 @@ public class DashboardController {
         });
     }
 
+    private void addTableActions(){
+        dashboardView.getTransactionTable().setRowFactory(new Callback<TableView<MonthlyFinance>, TableRow<MonthlyFinance>>() {
+            @Override
+            public TableRow<MonthlyFinance> call(TableView<MonthlyFinance> monthlyFinanceTableView) {
+                TableRow<MonthlyFinance> row = new TableRow<>();
+                row.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        MonthlyFinance monthlyFinance = row.getItem();
+                        if(!row.isEmpty() && mouseEvent.getClickCount() == 2){
+                            new ViewTransactionDialog(DashboardController.this, monthlyFinance.getMonth())
+                                    .showAndWait();
+                        }
+                    }
+                });
+                return row;
+            }
+        });
+    }
+
     private void createRecentTransactionComponents(){
         transactionsList.setAll(SqlUtil.getRecentTransactions(user.getId(), 0, 10));
 
@@ -146,11 +172,6 @@ public class DashboardController {
             );
         }
     }
-
-    public User getUser() {
-        return user;
-    }
-
 
 
     public void addComboBoxActions(){
@@ -199,5 +220,11 @@ public class DashboardController {
         }).start();
     }
 
+    public User getUser() {
+        return user;
+    }
 
+    public int getCurrentYear() {
+        return currentYear;
+    }
 }
