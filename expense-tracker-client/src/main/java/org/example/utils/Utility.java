@@ -10,8 +10,8 @@ import org.example.models.User;
 import java.time.LocalDate;
 
 public class Utility {
-    public static final int APP_WIDTH = 1614;
-    public static final int APP_HEIGHT = 900;
+    public static final int APP_WIDTH = 1280;
+    public static final int APP_HEIGHT = 780;
 //    public static final int APP_WIDTH = 1641;
 //    public static final int APP_HEIGHT = 900;
 

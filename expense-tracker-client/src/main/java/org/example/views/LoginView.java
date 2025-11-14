@@ -2,18 +2,25 @@ package org.example.views;
 
 
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import org.example.controllers.LoginController;
 import org.example.utils.Utility;
 import org.example.utils.ViewNavigator;
 
+
 public class LoginView {
     private Label expenseTrackerLabel = new Label("Smart Spend");
+    private ImageView logoImageView = new ImageView( new Image(getClass().getResourceAsStream("/images/logo.png")));
     private TextField usernameField = new TextField();
     private PasswordField passwordField = new PasswordField();
     private Button loginButton = new Button("Login");
@@ -28,39 +35,54 @@ public class LoginView {
     }
 
     private Scene createScene(){
-        VBox mainContainerBox = new VBox(71);
+        VBox mainContainerBox = new VBox(40);
         mainContainerBox.getStyleClass().addAll("main-background");
-        mainContainerBox.setAlignment(Pos.TOP_CENTER);
+        mainContainerBox.setAlignment(Pos.CENTER);
 
-        // Login Form Box
-        VBox loginFormBox = createLoginFormBox();
+        // --- Styling the logo ---
+        logoImageView.setFitWidth(120);
+        logoImageView.setPreserveRatio(true);
 
-        // Styling expenseTrackerLabel
+        // Add a soft shadow under the logo
+        DropShadow shadow = new DropShadow();
+        shadow.setRadius(10);
+        shadow.setColor(Color.rgb(0, 0, 0, 0.35));
+        logoImageView.setEffect(shadow);
+
+        // --- Title styling ---
         expenseTrackerLabel.getStyleClass().addAll("header", "text-white");
 
+        VBox loginFormBox = createLoginFormBox();
 
-        mainContainerBox.getChildren().addAll(expenseTrackerLabel, loginFormBox);
-        return  new Scene(mainContainerBox, Utility.APP_WIDTH, Utility.APP_HEIGHT);
+        mainContainerBox.getChildren().addAll(
+                logoImageView,
+                expenseTrackerLabel,
+                loginFormBox
+        );
+
+        return new Scene(mainContainerBox, Utility.APP_WIDTH, Utility.APP_HEIGHT);
     }
 
 
     private VBox createLoginFormBox(){
-        VBox loginFormBox = new VBox(51);
+        VBox loginFormBox = new VBox(25);
 
         usernameField.getStyleClass().addAll("field-background", "text-light-gray", "text-size-lg", "rounded-borders");
-        usernameField.setMaxWidth(473);
+        usernameField.setMaxWidth(420);
         usernameField.setPromptText("Enter Username");
 
         passwordField.getStyleClass().addAll("field-background", "text-light-gray", "text-size-lg", "rounded-borders");
-        passwordField.setMaxWidth(473);
+        passwordField.setMaxWidth(420);
         passwordField.setPromptText("Enter Password");
+
         loginButton.getStyleClass().addAll("text-size-lg", "bg-light-blue", "text-white", "text-weight-700", "rounded-border");
-        loginButton.setMaxWidth(473);
+        loginButton.setMaxWidth(420);
 
         signupLabel.getStyleClass().addAll("text-size-md", "text-light-gray", "text-underline", "link-text");
 
-        loginFormBox.getChildren().addAll(usernameField, passwordField, loginButton, signupLabel);
         loginFormBox.setAlignment(Pos.CENTER);
+        loginFormBox.getChildren().addAll(usernameField, passwordField, loginButton, signupLabel);
+
         return loginFormBox;
     }
 

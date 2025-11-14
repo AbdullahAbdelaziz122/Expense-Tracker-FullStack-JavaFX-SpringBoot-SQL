@@ -80,6 +80,7 @@ public class CategoryComponent extends HBox {
                 Long categoryId = transactionCategory.getId();
                 // send update request
                 boolean status = SqlUtil.putTransactionCategory(categoryId, newCategoryName, newCategoryColor);
+                dashboardController.refreshDashboardData();
 
             }
         });

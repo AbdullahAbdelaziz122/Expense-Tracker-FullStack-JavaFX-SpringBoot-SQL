@@ -6,7 +6,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import org.example.controllers.SignUpController;
 import org.example.utils.Utility;
 import org.example.utils.ViewNavigator;
@@ -19,7 +23,7 @@ public class SignUpView {
     private PasswordField passwordVerifyField = new PasswordField();
     private Button registerButton = new Button("Register");
     private Label loginLabel = new Label("Already have an account? Login Here");
-
+    private ImageView logoImageView = new ImageView( new Image(getClass().getResourceAsStream("/images/logo.png")));
     public void show(){
         Scene scene = createScene();
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
@@ -28,49 +32,77 @@ public class SignUpView {
         ViewNavigator.switchScene(scene);
     }
 
-    private Scene createScene(){
-        VBox mainContainerBox = new VBox(71);
+    private Scene createScene() {
+        VBox mainContainerBox = new VBox(40); // reduced from 71 for better layout
         mainContainerBox.getStyleClass().addAll("main-background");
-        mainContainerBox.setAlignment(Pos.TOP_CENTER);
+        mainContainerBox.setAlignment(Pos.CENTER);
 
-        // Sign Up Form Box
-        VBox signUpFormBox = createSignUpFormBox();
+        // --- Logo Styling ---
+        logoImageView.setFitWidth(120);
+        logoImageView.setPreserveRatio(true);
 
-        // Styling expenseTrackerLabel
+        DropShadow shadow = new DropShadow();
+        shadow.setRadius(10);
+        shadow.setColor(Color.rgb(0, 0, 0, 0.35));
+        logoImageView.setEffect(shadow);
+
+        // --- Header ---
         expenseTrackerLabel.getStyleClass().addAll("header", "text-white");
 
-        mainContainerBox.getChildren().addAll(expenseTrackerLabel, signUpFormBox);
+        VBox signUpFormBox = createSignUpFormBox();
+
+        mainContainerBox.getChildren().addAll(
+                logoImageView,
+                expenseTrackerLabel,
+                signUpFormBox
+        );
+
         return new Scene(mainContainerBox, Utility.APP_WIDTH, Utility.APP_HEIGHT);
     }
 
-    private VBox createSignUpFormBox(){
+    private VBox createSignUpFormBox() {
+        VBox signUpFormBox = new VBox(20); // smoother than 25
+        signUpFormBox.setAlignment(Pos.CENTER);
 
-        VBox signUpFormBox  = new VBox(51);
-
+        // Username
         usernameField.getStyleClass().addAll("field-background", "text-light-gray", "text-size-lg", "rounded-borders");
-        usernameField.setMaxWidth(473);
+        usernameField.setMaxWidth(420);
         usernameField.setPromptText("Enter Username");
 
+        // Email
         emailFiled.getStyleClass().addAll("field-background", "text-light-gray", "text-size-lg", "rounded-borders");
-        emailFiled.setMaxWidth(473);
+        emailFiled.setMaxWidth(420);
         emailFiled.setPromptText("Enter Email");
 
+        // Password
         passwordField.getStyleClass().addAll("field-background", "text-light-gray", "text-size-lg", "rounded-borders");
-        passwordField.setMaxWidth(473);
+        passwordField.setMaxWidth(420);
         passwordField.setPromptText("Enter Password");
 
+        // Password Verify
         passwordVerifyField.getStyleClass().addAll("field-background", "text-light-gray", "text-size-lg", "rounded-borders");
-        passwordVerifyField.setMaxWidth(473);
-        passwordVerifyField.setPromptText("Re-Enter Password");
+        passwordVerifyField.setMaxWidth(420);
+        passwordVerifyField.setPromptText("Re-enter Password");
 
+        // Register button
         registerButton.getStyleClass().addAll("text-size-lg", "bg-light-blue", "text-white", "text-weight-700", "rounded-border");
-        registerButton.setMaxWidth(473);
+        registerButton.setMaxWidth(420);
 
+        // Login link
         loginLabel.getStyleClass().addAll("text-size-md", "text-light-gray", "text-underline", "link-text");
-        signUpFormBox.getChildren().addAll(usernameField, emailFiled, passwordField, passwordVerifyField, registerButton, loginLabel);
-        signUpFormBox.setAlignment(Pos.CENTER);
+
+        signUpFormBox.getChildren().addAll(
+                usernameField,
+                emailFiled,
+                passwordField,
+                passwordVerifyField,
+                registerButton,
+                loginLabel
+        );
+
         return signUpFormBox;
     }
+
 
 
     public Label getLoginLabel() {
