@@ -52,12 +52,9 @@ public class DashboardView {
         totalExpenseLabel = new Label("Total Expense:");
 
         addTransactionButton = new Button("+");
-
-
         currentBalance = new Label("$0.00");
         totalIncome = new Label("$0.00");
         totalExpense = new Label("$0.00");
-
     }
 
     public void show(){
@@ -329,5 +326,29 @@ public class DashboardView {
 
     public ComboBox<Integer> getYearComboBox() {
         return yearComboBox;
+    }
+
+    public Label getCurrentBalance() {
+        return currentBalance;
+    }
+
+    public void setCurrentBalance(Label currentBalance) {
+        this.currentBalance = currentBalance;
+    }
+
+    public Label getTotalIncome() {
+        return totalIncome;
+    }
+
+    public void setTotalIncome(Label totalIncome) {
+        this.totalIncome = totalIncome;
+    }
+
+    public Label getTotalExpense() {
+        return totalExpense;
+    }
+
+    public void setTotalExpense(Label totalExpense) {
+        this.totalExpense = totalExpense;
     }
 }

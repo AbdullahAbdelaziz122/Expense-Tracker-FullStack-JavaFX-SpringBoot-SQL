@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
@@ -21,6 +22,7 @@ import org.example.views.DashboardView;
 import org.example.views.LoginView;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Month;
 import java.util.List;
 
@@ -67,6 +69,8 @@ public class DashboardController {
         // Get recentTransactions
         createRecentTransactionComponents();
 
+        calculateBalanceIncomeExpense();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -80,6 +84,29 @@ public class DashboardController {
         }).start();
     }
 
+    private void calculateBalanceIncomeExpense(){
+        BigDecimal totalIncome = BigDecimal.ZERO;
+        BigDecimal totalExpense = BigDecimal.ZERO;
+
+        for (Transaction transaction : currentTransactionsByYear) {
+
+            if (transaction.getType().equalsIgnoreCase("Income")) {
+                totalIncome = totalIncome.add(BigDecimal.valueOf(transaction.getAmount()));
+            } else {
+                totalExpense = totalExpense.add(BigDecimal.valueOf(transaction.getAmount()));
+            }
+        }
+
+        totalIncome = totalIncome.setScale(2, RoundingMode.HALF_UP);
+        totalExpense = totalExpense.setScale(2, RoundingMode.HALF_UP);
+
+        BigDecimal currentBalance = totalIncome.subtract(totalExpense)
+                .setScale(2, RoundingMode.HALF_UP);
+
+        dashboardView.getTotalIncome().setText("$" + totalIncome);
+        dashboardView.getTotalExpense().setText("$" + totalExpense);
+        dashboardView.getCurrentBalance().setText("$" + currentBalance);
+    }
 
     private ObservableList<MonthlyFinance> calculateMonthlyFinances(){
         double[] incomeCounter = new double[12];
@@ -207,6 +234,7 @@ public class DashboardController {
         // Refresh monthly finances table
         dashboardView.getTransactionTable().setItems(calculateMonthlyFinances());
 
+        calculateBalanceIncomeExpense();
         new Thread(new Runnable() {
             @Override
             public void run() {
