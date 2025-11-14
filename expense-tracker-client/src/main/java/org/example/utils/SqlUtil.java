@@ -374,6 +374,24 @@ public class SqlUtil {
         }
     }
 
+    public static List<Transaction> getUserTransactionsByYear(Long userId, int year, int month){
+
+        try {
+
+            JsonObject response = ApiUtil.fetchApi(
+                    "/api/v1/transaction/summary/"+ userId + "?year="+year+"&month="+month,
+                    ApiUtil.RequestMethod.GET,
+                    null
+            );
+            return handleTransactionResponse(response);
+        }catch (IOException ex){
+            ex.printStackTrace();
+            System.out.println("⚠️ Network or connection error: " + ex.getMessage());
+            Utility.showAlertDialog(Alert.AlertType.ERROR, "ConnectionError\nCheck connection and refresh");
+            return new ArrayList<Transaction>();
+        }
+    }
+
     private static List<Transaction> handleTransactionResponse(JsonObject response){
         /*
         * Helper method to handle the response of List of transaction and parse it.
