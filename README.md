@@ -59,6 +59,10 @@ A powerful, full-stack desktop application for tracking personal finances with a
 
 ```
 src/
+├── config
+│   ├── BCryptConfig
+│   └── SecurityConfig
+│
 ├── controllers/          # REST API endpoints
 │   ├── UserController
 │   ├── TransactionController
